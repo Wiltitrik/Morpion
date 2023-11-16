@@ -1,0 +1,77 @@
+00001000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 06/10/2023 09:21:10
+
+00000000                             1  SET_PEN_COLOR:
+00000000  303C 0050                  2      MOVE #80,D0
+00000004  4E4F                       3      TRAP #15
+00000006  4E75                       4      RTS
+00000008                             5      
+00000008                             6  SET_FILL_COLOR:
+00000008  303C 0051                  7      MOVE #81,D0
+0000000C  4E4F                       8      TRAP #15
+0000000E  4E75                       9      RTS
+00000010                            10      
+00000010                            11  POT_DE_PEINTURE:
+00000010  303C 0059                 12      MOVE #89,D0
+00000014  4E4F                      13      TRAP #15
+00000016  4E75                      14      RTS
+00000018                            15  
+00000018                            16  DRAW_LINE:
+00000018  303C 0054                 17      MOVE #84,D0
+0000001C  4E4F                      18      TRAP #15
+0000001E  4E75                      19      RTS
+00000020                            20  
+00000020                            21  DRAW_RECT:
+00000020  303C 005A                 22      MOVE #90,D0
+00000024  4E4F                      23      TRAP #15
+00000026  4E75                      24      RTS
+00000028                            25      
+00000028                            26  DRAW_FILL_ELLIPSE:
+00000028  303C 0058                 27      MOVE #88,D0
+0000002C  4E4F                      28      TRAP #15
+0000002E  4E75                      29      RTS
+00000030                            30      
+00000030                            31  DRAW_ELLIPSE:
+00000030  303C 005B                 32      MOVE #91,D0
+00000034  4E4F                      33      TRAP #15
+00000036  4E75                      34      RTS
+00000038                            35      
+00000038                            36  DRAW_FILL_RECT:
+00000038  303C 0057                 37      MOVE #87,D0
+0000003C  4E4F                      38      TRAP #15
+0000003E  4E75                      39      RTS
+00000040                            40      
+00000040                            41  WIDTH_PEN:
+00000040  303C 005D                 42      MOVE #93,D0
+00000044  4E4F                      43      TRAP #15
+00000046  4E75                      44      RTS
+00000048                            45      
+00000048                            46  DRAW_STRING:
+00000048  303C 005F                 47      MOVE #95,D0
+0000004C  4E4F                      48      TRAP #15
+0000004E  4E75                      49      RTS
+00000050                            50  
+00000050                            51  
+00000050                            52  
+00000050                            53  
+00000050                            54  
+Line 55 WARNING: END directive missing, starting address not set
+
+No errors detected
+1 warning generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+DRAW_ELLIPSE        30
+DRAW_FILL_ELLIPSE   28
+DRAW_FILL_RECT      38
+DRAW_LINE           18
+DRAW_RECT           20
+DRAW_STRING         48
+POT_DE_PEINTURE     10
+SET_FILL_COLOR      8
+SET_PEN_COLOR       0
+WIDTH_PEN           40

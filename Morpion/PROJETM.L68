@@ -1,0 +1,2653 @@
+00001000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 06/10/2023 09:21:36
+
+00000000                             1  *-----------------------------------------------------------
+00000000                             2  * Title      : MORPION
+00000000                             3  * Written by :
+00000000                             4  * Date       :
+00000000                             5  * Description:
+00000000                             6  *-----------------------------------------------------------
+00001000                             7      ORG $1000
+00001000                             8      
+00001000                             9  *    AFFICHAGE DU MENU ET CHOIX DU MODE DE JEUX
+00001000                            10  MENU:
+00001000  4EB9 0000228A             11      JSR JOUEUR_1_2
+00001006  13FC 0030 00002C16        12      MOVE.B #48,SCORE_X
+0000100E  13FC 0030 00002C18        13      MOVE.B #48,SCORE_O
+00001016  13FC 0030 00002C8E        14      MOVE.B #48,S_X
+0000101E  13FC 0030 00002C8F        15      MOVE.B #48,S_O
+00001026                            16  CHOISIR:
+00001026  323C 0000                 17      MOVE.W #$0000,D1
+0000102A  4EB9 000021F4             18      JSR POS_CURS
+00001030  4EB9 000021FC             19      JSR SAISCAR
+00001036  B23C 0079                 20      CMP.B  #$79,D1
+0000103A  6700 000C                 21      BEQ _2_JOUEUR
+0000103E  B23C 0074                 22      CMP.B  #$74,D1
+00001042  6700 080A                 23      BEQ _1_JOUEUR
+00001046  60DE                      24      BRA CHOISIR
+00001048                            25      
+00001048                            26      
+00001048                            27  *    CHOIX DU MODE A DEUX JOUEUR
+00001048                            28  _2_JOUEUR:
+00001048  13FC 0002 00002BFD        29      MOVE.B #2,CHOIXNJ
+00001050                            30  REPRENDRE_LE_JEU:
+00001050  183C 0000                 31      MOVE.B #0,D4
+00001054  207C 00002BDE             32      MOVE.L #TABLE,A0
+0000105A  2043                      33      MOVE.L D3,A0
+0000105C  207C 00002BDE             34      MOVE.L #TABLE,A0
+00001062  10BC 0058                 35      MOVE.B #'X',(A0)
+00001066  207C 00002BDE             36      MOVE.L #TABLE,A0
+0000106C  5888                      37      ADD.L #4,A0
+0000106E  10BC 0058                 38      MOVE.B #'X',(A0)
+00001072  207C 00002BDE             39      MOVE.L #TABLE,A0
+00001078  D1FC 00000014             40      ADD.L #20,A0
+0000107E  10BC 0058                 41      MOVE.B #'X',(A0)
+00001082  207C 00002BDE             42      MOVE.L #TABLE,A0
+00001088  D1FC 00000018             43      ADD.L #24,A0
+0000108E  10BC 0058                 44      MOVE.B #'X',(A0)
+00001092                            45  *    AFFICHAGE DE LA GRILLE
+00001092  4EB9 000025F2             46      JSR DESSINER_GRILLE
+00001098                            47    
+00001098                            48  CONTINUER_JEU:
+00001098  0C39 0000 00002BFE        49      CMP.B #0,J1_J2
+000010A0  6700 0002                 50      BEQ JOUEUR1
+000010A4                            51  *    TOUR DU PREMIER JOUEUR
+000010A4                            52  JOUEUR1:
+000010A4                            53  REPRENDRE_J1:
+000010A4  4EB9 00002760             54      JSR TOUR_X
+000010AA  13FC 0000 00002BFC        55      MOVE.B #0,PLEIN
+000010B2  323C 0000                 56      MOVE.W #$0000,D1
+000010B6  4EB9 000021F4             57      JSR POS_CURS
+000010BC  13FC 0001 00002BFE        58      MOVE.B #1,J1_J2
+000010C4  7200                      59      MOVE.L #$0,D1
+000010C6  7600                      60      MOVE.L #$0,D3
+000010C8  7800                      61      MOVE.L #$0,D4
+000010CA  7A00                      62      MOVE.L #$0,D5
+000010CC  7C00                      63      MOVE.L #$0,D6
+000010CE                            64  *    CHOIX DE LA CASE ET VERICATION SI LA CASE EST BIEN DANS LA GRILLE
+000010CE  4EB9 000021FC             65      JSR SAISCAR
+000010D4  1E01                      66      MOVE.B D1,D7
+000010D6  BE3C 0031                 67      CMP.B #$31,D7
+000010DA  6A00 0004                 68      BPL SUPERIEUR_A30_J1
+000010DE  60C4                      69      BRA REPRENDRE_J1
+000010E0                            70  SUPERIEUR_A30_J1:
+000010E0  BE3C 003A                 71      CMP.B #$3A,D7
+000010E4  6ABE                      72      BPL REPRENDRE_J1
+000010E6  B27C 0037                 73      CMP #$37,D1
+000010EA  6A00 0174                 74      BPL SUPERIEUR_J1
+000010EE                            75  INFERIEUR_J1:
+000010EE  B27C 0034                 76      CMP #$34,D1
+000010F2  6A00 00C4                 77      BPL MINISUPERIEUR_J1
+000010F6                            78  MINIINFERIEUR_J1:
+000010F6  0441 0031                 79      SUB #$31,D1
+000010FA  0601 0010                 80      ADD.B #16,D1
+000010FE  1A01                      81      MOVE.B D1,D5
+00001100  1C01                      82      MOVE.B D1,D6
+00001102  0445 000F                 83      SUB #15,D5
+00001106  207C 00002BDE             84      MOVE.L #TABLE,A0
+0000110C  D1C1                      85      ADD.L D1,A0
+0000110E  23C8 00002C00             86      MOVE.L A0,ADRESSE
+00001114  0C10 0058                 87      CMP.B #'X',(A0)
+00001118  6600 0004                 88      BNE REGARDER1_O_J1
+0000111C  6086                      89      BRA REPRENDRE_J1
+0000111E                            90  REGARDER1_O_J1:
+0000111E  0C10 004F                 91      CMP.B #'O',(A0)
+00001122  6600 0006                 92      BNE EMPTY1_J1
+00001126  6000 FF7C                 93      BRA REPRENDRE_J1
+0000112A                            94  EMPTY1_J1:
+0000112A  10BC 0058                 95      MOVE.B #'X',(A0)
+0000112E  207C 00002BDE             96      MOVE.L #TABLE,A0
+00001134  D1C5                      97      ADD.L D5,A0
+00001136  10BC 0058                 98      MOVE.B #'X',(A0)
+0000113A  B23C 0012                 99      CMP.B #18,D1
+0000113E  6700 000E                100      BEQ METTRE_18_J1
+00001142  B23C 0010                101      CMP.B #16,D1
+00001146  6700 0020                102      BEQ METTRE_16_J1
+0000114A  6000 002E                103      BRA METTRE_SYMB1_J1
+0000114E                           104  METTRE_18_J1:
+0000114E  5706                     105      SUB.B #3,D6
+00001150  207C 00002BDE            106      MOVE.L #TABLE,A0
+00001156  D1C6                     107      ADD.L D6,A0
+00001158  10BC 0058                108      MOVE.B #'X',(A0)
+0000115C  B23C 0010                109      CMP.B #16,D1
+00001160  6700 0006                110      BEQ METTRE_16_J1
+00001164  6000 0014                111      BRA METTRE_SYMB1_J1
+00001168                           112  METTRE_16_J1:
+00001168  5606                     113      ADD.B #3,D6
+0000116A  207C 00002BDE            114      MOVE.L #TABLE,A0
+00001170  D1C6                     115      ADD.L D6,A0
+00001172  10BC 0058                116      MOVE.B #'X',(A0)
+00001176  6000 0002                117      BRA METTRE_SYMB1_J1
+0000117A                           118  METTRE_SYMB1_J1:
+0000117A  BE3C 0031                119      CMP.B #$31,D7
+0000117E  6700 0016                120      BEQ X_case_2_0_J1
+00001182  BE3C 0032                121      CMP.B #$32,D7
+00001186  6700 0018                122      BEQ X_case_2_1_J1
+0000118A  BE3C 0033                123      CMP.B #$33,D7
+0000118E  6700 001A                124      BEQ X_case_2_2_J1
+00001192  6000 0020                125      BRA NSUP_J1
+00001196                           126  X_case_2_0_J1:
+00001196  4EB9 00002AAC            127      JSR X_case_2_0
+0000119C  6000 0016                128      BRA NSUP_J1
+000011A0                           129  X_case_2_1_J1:
+000011A0  4EB9 00002B12            130      JSR X_case_2_1
+000011A6  6000 000C                131      BRA NSUP_J1
+000011AA                           132  X_case_2_2_J1:
+000011AA  4EB9 00002B78            133      JSR X_case_2_2
+000011B0  6000 0002                134      BRA NSUP_J1
+000011B4                           135  NSUP_J1:
+000011B4  6000 0162                136      BRA FINJOUEUR_J1
+000011B8                           137  MINISUPERIEUR_J1:
+000011B8  0441 0031                138      SUB #$31,D1
+000011BC  5001                     139      ADD.B #8,D1
+000011BE  1C01                     140      MOVE.B D1,D6
+000011C0  207C 00002BDE            141      MOVE.L #TABLE,A0
+000011C6  D1C1                     142      ADD.L D1,A0
+000011C8  23C8 00002C00            143      MOVE.L A0,ADRESSE
+000011CE  0C10 0058                144      CMP.B #'X',(A0)
+000011D2  6600 0006                145      BNE REGARDER2_O_J1
+000011D6  6000 FECC                146      BRA REPRENDRE_J1
+000011DA                           147  REGARDER2_O_J1:
+000011DA  0C10 004F                148      CMP.B #'O',(A0)
+000011DE  6600 0006                149      BNE EMPTY2_J1
+000011E2  6000 FEC0                150      BRA REPRENDRE_J1
+000011E6                           151  EMPTY2_J1:
+000011E6  10BC 0058                152      MOVE.B #'X',(A0)
+000011EA  B23C 000D                153      CMP.B #13,D1
+000011EE  6700 000E                154      BEQ METTRE_13_J1
+000011F2  B23C 000B                155      CMP.B #11,D1
+000011F6  6700 0020                156      BEQ METTRE_11_J1
+000011FA  6000 002E                157      BRA METTRE_SYMB2_J1
+000011FE                           158  METTRE_13_J1:
+000011FE  5706                     159      SUB.B #3,D6
+00001200  207C 00002BDE            160      MOVE.L #TABLE,A0
+00001206  D1C6                     161      ADD.L D6,A0
+00001208  10BC 0058                162      MOVE.B #'X',(A0)
+0000120C  B23C 000B                163      CMP.B #11,D1
+00001210  6700 0006                164      BEQ METTRE_11_J1
+00001214  6000 0014                165      BRA METTRE_SYMB2_J1
+00001218                           166  METTRE_11_J1:
+00001218  5606                     167      ADD.B #3,D6
+0000121A  207C 00002BDE            168      MOVE.L #TABLE,A0
+00001220  D1C6                     169      ADD.L D6,A0
+00001222  10BC 0058                170      MOVE.B #'X',(A0)
+00001226  6000 0002                171      BRA METTRE_SYMB2_J1
+0000122A                           172  METTRE_SYMB2_J1:
+0000122A  BE3C 0034                173      CMP.B #$34,D7
+0000122E  6700 000E                174      BEQ X_case_1_0_J1
+00001232  BE3C 0035                175      CMP.B #$35,D7
+00001236  6700 0010                176      BEQ X_case_1_1_J1
+0000123A  6000 0016                177      BRA X_case_1_2_J1
+0000123E                           178  X_case_1_0_J1:
+0000123E  4EB9 0000297A            179      JSR X_case_1_0
+00001244  6000 0016                180      BRA MSUP_J1
+00001248                           181  X_case_1_1_J1:
+00001248  4EB9 000029E0            182      JSR X_case_1_1
+0000124E  6000 000C                183      BRA MSUP_J1
+00001252                           184  X_case_1_2_J1:
+00001252  4EB9 00002A46            185      JSR X_case_1_2
+00001258  6000 0002                186      BRA MSUP_J1
+0000125C                           187  MSUP_J1:
+0000125C  6000 00BA                188      BRA FINJOUEUR_J1
+00001260                           189  SUPERIEUR_J1:
+00001260  0441 0031                190      SUB #$31,D1
+00001264  1A01                     191      MOVE.B D1,D5
+00001266  1C01                     192      MOVE.B D1,D6
+00001268  0605 000F                193      ADD.B #15,D5
+0000126C  207C 00002BDE            194      MOVE.L #TABLE,A0
+00001272  D1C1                     195      ADD.L D1,A0
+00001274  23C8 00002C00            196      MOVE.L A0,ADRESSE
+0000127A  0C10 0058                197      CMP.B #'X',(A0)
+0000127E  6600 0006                198      BNE REGARDER3_O_J1
+00001282  6000 FE20                199      BRA REPRENDRE_J1
+00001286                           200  REGARDER3_O_J1:
+00001286  0C10 004F                201      CMP.B #'O',(A0)
+0000128A  6600 0006                202      BNE EMPTY3_J1
+0000128E  6000 FE14                203      BRA REPRENDRE_J1
+00001292                           204  EMPTY3_J1:
+00001292  10BC 0058                205      MOVE.B #'X',(A0)
+00001296  207C 00002BDE            206      MOVE.L #TABLE,A0
+0000129C  D1C5                     207      ADD.L D5,A0
+0000129E  10BC 0058                208      MOVE.B #'X',(A0)
+000012A2  B23C 0008                209      CMP.B #8,D1
+000012A6  6700 000E                210      BEQ METTRE_8_J1
+000012AA  B23C 0006                211      CMP.B #6,D1
+000012AE  6700 0020                212      BEQ METTRE_6_J1
+000012B2  6000 002E                213      BRA METTRE_SYMB3_J1
+000012B6                           214  METTRE_8_J1:
+000012B6  5706                     215      SUB.B #3,D6
+000012B8  207C 00002BDE            216      MOVE.L #TABLE,A0
+000012BE  D1C6                     217      ADD.L D6,A0
+000012C0  10BC 0058                218      MOVE.B #'X',(A0)
+000012C4  B23C 0006                219      CMP.B #6,D1
+000012C8  6700 0006                220      BEQ METTRE_6_J1
+000012CC  6000 0014                221      BRA METTRE_SYMB3_J1
+000012D0                           222  METTRE_6_J1:
+000012D0  5606                     223      ADD.B #3,D6
+000012D2  207C 00002BDE            224      MOVE.L #TABLE,A0
+000012D8  D1C6                     225      ADD.L D6,A0
+000012DA  10BC 0058                226      MOVE.B #'X',(A0)
+000012DE  6000 0002                227      BRA METTRE_SYMB3_J1
+000012E2                           228  METTRE_SYMB3_J1:
+000012E2  BE3C 0037                229      CMP.B #$37,D7
+000012E6  6700 000E                230      BEQ X_case_0_0_J1
+000012EA  BE3C 0038                231      CMP.B #$38,D7
+000012EE  6700 0010                232      BEQ X_case_0_1_J1
+000012F2  6000 0016                233      BRA X_case_0_2_J1
+000012F6                           234  X_case_0_0_J1:
+000012F6  4EB9 00002848            235      JSR X_case_0_0
+000012FC  6000 0016                236      BRA SUP_J1
+00001300                           237  X_case_0_1_J1:
+00001300  4EB9 000028AE            238      JSR X_case_0_1
+00001306  6000 000C                239      BRA SUP_J1
+0000130A                           240  X_case_0_2_J1:
+0000130A  4EB9 00002914            241      JSR X_case_0_2
+00001310  6000 0002                242      BRA SUP_J1
+00001314                           243  SUP_J1:
+00001314  6000 0002                244      BRA FINJOUEUR_J1
+00001318                           245  FINJOUEUR_J1:
+00001318                           246  *    VERIFICATION DES COLONNES ET LIGNES GAGNANTES
+00001318  2279 00002C00            247      MOVE.L ADRESSE,A1
+0000131E  2479 00002C00            248      MOVE.L ADRESSE,A2
+00001324  2679 00002C00            249      MOVE.L ADRESSE,A3
+0000132A  1813                     250      MOVE.B (A3),D4
+0000132C  5B89                     251      SUB.L #5,A1
+0000132E  5A8A                     252      ADD.L #5,A2
+00001330  B811                     253      CMP.B (A1),D4
+00001332  6700 0006                254      BEQ VERIFIER_COLONNE_EN_BAS_J1
+00001336  6000 000C                255      BRA VERIFIER_LIGNE_G_J1
+0000133A                           256  VERIFIER_COLONNE_EN_BAS_J1:
+0000133A  B812                     257      CMP.B (A2),D4
+0000133C  6700 0D0C                258      BEQ RESULTAT
+00001340  6000 0002                259      BRA VERIFIER_LIGNE_G_J1
+00001344                           260  VERIFIER_LIGNE_G_J1:
+00001344  2279 00002C00            261      MOVE.L ADRESSE,A1
+0000134A  2479 00002C00            262      MOVE.L ADRESSE,A2
+00001350  2679 00002C00            263      MOVE.L ADRESSE,A3
+00001356  1813                     264      MOVE.B (A3),D4
+00001358  5389                     265      SUB.L #1,A1
+0000135A  528A                     266      ADD.L #1,A2
+0000135C  B811                     267      CMP.B (A1),D4
+0000135E  6700 0006                268      BEQ VERIFIER_LIGNE_D_J1
+00001362  6000 000C                269      BRA CONTINUER_VERIF_D_J1
+00001366                           270  VERIFIER_LIGNE_D_J1:
+00001366  B812                     271      CMP.B (A2),D4
+00001368  6700 0CE0                272      BEQ RESULTAT
+0000136C  6000 0002                273      BRA CONTINUER_VERIF_D_J1
+00001370                           274  CONTINUER_VERIF_D_J1:
+00001370                           275  *    VERIFICATION DES DIAGONALE GAGNANTES
+00001370  0447 0031                276      SUB #$31,D7
+00001374  BE3C 0006                277      CMP.B #6,D7
+00001378  6700 0016                278      BEQ VERIFIER_DIAGONALE_1_J1
+0000137C  BE3C 0004                279      CMP.B #4,D7
+00001380  6700 000E                280      BEQ VERIFIER_DIAGONALE_1_J1
+00001384  BE3C 0002                281      CMP.B #2,D7
+00001388  6700 0006                282      BEQ VERIFIER_DIAGONALE_1_J1
+0000138C  6000 0040                283      BRA LAUTRE_DIAGONALE_J1
+00001390                           284  VERIFIER_DIAGONALE_1_J1:
+00001390  207C 00002BDE            285      MOVE.L #TABLE,A0
+00001396  5C88                     286      ADD.L #6,A0
+00001398  B810                     287      CMP.B (A0),D4
+0000139A  6700 0006                288      BEQ CASE_SUIV_DIA1_1_J1
+0000139E  6000 002E                289      BRA LAUTRE_DIAGONALE_J1
+000013A2                           290  CASE_SUIV_DIA1_1_J1:
+000013A2  207C 00002BDE            291      MOVE.L #TABLE,A0
+000013A8  D1FC 0000000C            292      ADD.L #12,A0
+000013AE  B810                     293      CMP.B (A0),D4
+000013B0  6700 0006                294      BEQ CASE_SUIV_DIA1_2_J1
+000013B4  6000 0018                295      BRA LAUTRE_DIAGONALE_J1
+000013B8                           296  CASE_SUIV_DIA1_2_J1:
+000013B8  207C 00002BDE            297      MOVE.L #TABLE,A0
+000013BE  D1FC 00000012            298      ADD.L #18,A0
+000013C4  B810                     299      CMP.B (A0),D4
+000013C6  6700 0C82                300      BEQ RESULTAT
+000013CA  6000 0002                301      BRA LAUTRE_DIAGONALE_J1
+000013CE                           302  LAUTRE_DIAGONALE_J1:
+000013CE  BE3C 0008                303      CMP.B #8,D7
+000013D2  6700 0016                304      BEQ VERIFIER_DIAGONALE_2_J1
+000013D6  BE3C 0004                305      CMP.B #4,D7
+000013DA  6700 000E                306      BEQ VERIFIER_DIAGONALE_2_J1
+000013DE  BE3C 0000                307      CMP.B #0,D7
+000013E2  6700 0006                308      BEQ VERIFIER_DIAGONALE_2_J1
+000013E6  6000 0040                309      BRA CONTINUER_J1
+000013EA                           310  VERIFIER_DIAGONALE_2_J1:
+000013EA  207C 00002BDE            311      MOVE.L #TABLE,A0
+000013F0  5088                     312      ADD.L #8,A0
+000013F2  B810                     313      CMP.B (A0),D4
+000013F4  6700 0006                314      BEQ CASE_SUIV_DIA2_1_J1
+000013F8  6000 002E                315      BRA CONTINUER_J1
+000013FC                           316  CASE_SUIV_DIA2_1_J1:
+000013FC  207C 00002BDE            317      MOVE.L #TABLE,A0
+00001402  D1FC 0000000C            318      ADD.L #12,A0
+00001408  B810                     319      CMP.B (A0),D4
+0000140A  6700 0006                320      BEQ CASE_SUIV_DIA2_2_J1
+0000140E  6000 0018                321      BRA CONTINUER_J1
+00001412                           322  CASE_SUIV_DIA2_2_J1:
+00001412  207C 00002BDE            323      MOVE.L #TABLE,A0
+00001418  D1FC 00000010            324      ADD.L #16,A0
+0000141E  B810                     325      CMP.B (A0),D4
+00001420  6700 0C28                326      BEQ RESULTAT
+00001424  6000 0002                327      BRA CONTINUER_J1
+00001428                           328  CONTINUER_J1:
+00001428                           329  *    ON VERIFIE SI LA TABLE EST PLEINE OU PAS
+00001428  207C 00002BDE            330      MOVE.L #TABLE,A0
+0000142E  2608                     331      MOVE.L A0,D3
+00001430  0603 0000                332      ADD.B #0,D3
+00001434  207C 00002BDE            333      MOVE.L #TABLE,A0
+0000143A  2808                     334      MOVE.L A0,D4
+0000143C  0644 0019                335      ADD.W #25,D4
+00001440                           336  VERIFIER_REMPLIE_J1:
+00001440  B644                     337      CMP.W D4,D3
+00001442  6700 0006                338      BEQ METTRE_PLEIN_J1
+00001446  6000 000E                339      BRA PAS_METTRE_PLEIN_J1
+0000144A                           340  METTRE_PLEIN_J1:
+0000144A  13FC 0001 00002BFC       341      MOVE.B #1,PLEIN
+00001452  6000 0BF6                342      BRA RESULTAT
+00001456                           343  PAS_METTRE_PLEIN_J1:
+00001456  2043                     344      MOVE.L D3,A0
+00001458  0C10 0058                345      CMP.B #'X',(A0)
+0000145C  6600 0006                346      BNE VERIFIER_O_J1
+00001460  5243                     347      ADD.W #1,D3
+00001462  60DC                     348      BRA VERIFIER_REMPLIE_J1
+00001464                           349  VERIFIER_O_J1:
+00001464  0C10 004F                350      CMP.B #'O',(A0)
+00001468  6600 0006                351      BNE FIN_VERIFIER_O_J1
+0000146C  5243                     352      ADD.W #1,D3
+0000146E  60D0                     353      BRA VERIFIER_REMPLIE_J1
+00001470                           354  FIN_VERIFIER_O_J1:
+00001470                           355  
+00001470                           356  
+00001470  0C79 0001 00002BFE       357      CMP #1,J1_J2
+00001478  6700 0002                358      BEQ JOUEUR2
+0000147C                           359  *    TOUR DU DEUXIEME JOUEUR
+0000147C                           360  JOUEUR2:
+0000147C                           361  REPRENDRE_J2:
+0000147C  4EB9 000027D4            362      JSR TOUR_O
+00001482  13FC 0000 00002BFC       363      MOVE.B #0,PLEIN
+0000148A  323C 0000                364      MOVE.W #$0000,D1
+0000148E  4EB9 000021F4            365      JSR POS_CURS
+00001494  13FC 0000 00002BFE       366      MOVE.B #0,J1_J2
+0000149C  7200                     367      MOVE.L #$0,D1
+0000149E  7600                     368      MOVE.L #$0,D3
+000014A0  7800                     369      MOVE.L #$0,D4
+000014A2  7A00                     370      MOVE.L #$0,D5
+000014A4  7C00                     371      MOVE.L #$0,D6
+000014A6                           372  *    CHOIX DE LA CASE ET VERIFICATION QUE LA CASE EST BIEN DANS LA GRILLE
+000014A6  4EB9 000021FC            373      JSR SAISCAR
+000014AC  1E01                     374      MOVE.B D1,D7
+000014AE  BE3C 0031                375      CMP.B #$31,D7
+000014B2  6A00 0004                376      BPL SUPERIEUR_A30_J2
+000014B6  60C4                     377      BRA REPRENDRE_J2
+000014B8                           378  SUPERIEUR_A30_J2
+000014B8  BE3C 003A                379      CMP.B #$3A,D7
+000014BC  6ABE                     380      BPL REPRENDRE_J2
+000014BE  B27C 0037                381      CMP #$37,D1
+000014C2  6A00 0174                382      BPL SUPERIEUR_J2
+000014C6                           383  INFERIEUR_J2:
+000014C6  B27C 0034                384      CMP #$34,D1
+000014CA  6A00 00C4                385      BPL MINISUPERIEUR_J2
+000014CE                           386  MINIINFERIEUR_J2:
+000014CE  0441 0031                387      SUB #$31,D1
+000014D2  0601 0010                388      ADD.B #16,D1
+000014D6  1A01                     389      MOVE.B D1,D5
+000014D8  1C01                     390      MOVE.B D1,D6
+000014DA  0445 000F                391      SUB #15,D5
+000014DE  207C 00002BDE            392      MOVE.L #TABLE,A0
+000014E4  D1C1                     393      ADD.L D1,A0
+000014E6  23C8 00002C00            394      MOVE.L A0,ADRESSE
+000014EC  0C10 004F                395      CMP.B #'O',(A0)
+000014F0  6600 0004                396      BNE REGARDER1_O_J2
+000014F4  6086                     397      BRA REPRENDRE_J2
+000014F6                           398  REGARDER1_O_J2:
+000014F6  0C10 0058                399      CMP.B #'X',(A0)
+000014FA  6600 0006                400      BNE EMPTY1_J2
+000014FE  6000 FF7C                401      BRA REPRENDRE_J2
+00001502                           402  EMPTY1_J2:
+00001502  10BC 004F                403      MOVE.B #'O',(A0)
+00001506  207C 00002BDE            404      MOVE.L #TABLE,A0
+0000150C  D1C5                     405      ADD.L D5,A0
+0000150E  10BC 004F                406      MOVE.B #'O',(A0)
+00001512  B23C 0012                407      CMP.B #18,D1
+00001516  6700 000E                408      BEQ METTRE_18_J2
+0000151A  B23C 0010                409      CMP.B #16,D1
+0000151E  6700 0020                410      BEQ METTRE_16_J2
+00001522  6000 002E                411      BRA METTRE_SYMB1_J2
+00001526                           412  METTRE_18_J2:
+00001526  5706                     413      SUB.B #3,D6
+00001528  207C 00002BDE            414      MOVE.L #TABLE,A0
+0000152E  D1C6                     415      ADD.L D6,A0
+00001530  10BC 004F                416      MOVE.B #'O',(A0)
+00001534  B23C 0010                417      CMP.B #16,D1
+00001538  6700 0006                418      BEQ METTRE_16_J2
+0000153C  6000 0014                419      BRA METTRE_SYMB1_J2
+00001540                           420  METTRE_16_J2:
+00001540  5606                     421      ADD.B #3,D6
+00001542  207C 00002BDE            422      MOVE.L #TABLE,A0
+00001548  D1C6                     423      ADD.L D6,A0
+0000154A  10BC 004F                424      MOVE.B #'O',(A0)
+0000154E  6000 0002                425      BRA METTRE_SYMB1_J2
+00001552                           426  METTRE_SYMB1_J2:
+00001552  BE3C 0031                427      CMP.B #$31,D7
+00001556  6700 0016                428      BEQ O_case_2_0_J2
+0000155A  BE3C 0032                429      CMP.B #$32,D7
+0000155E  6700 0018                430      BEQ O_case_2_1_J2
+00001562  BE3C 0033                431      CMP.B #$33,D7
+00001566  6700 001A                432      BEQ O_case_2_2_J2
+0000156A  6000 0020                433      BRA NSUP_J2
+0000156E                           434  O_case_2_0_J2:
+0000156E  4EB9 00002AE8            435      JSR O_case_2_0
+00001574  6000 0016                436      BRA NSUP_J2
+00001578                           437  O_case_2_1_J2:
+00001578  4EB9 00002B4E            438      JSR O_case_2_1
+0000157E  6000 000C                439      BRA NSUP_J2
+00001582                           440  O_case_2_2_J2:
+00001582  4EB9 00002BB4            441      JSR O_case_2_2
+00001588  6000 0002                442      BRA NSUP_J2
+0000158C                           443  NSUP_J2:
+0000158C  6000 0162                444      BRA FINJOUEUR_J2
+00001590                           445  MINISUPERIEUR_J2:
+00001590  0441 0031                446      SUB #$31,D1
+00001594  5001                     447      ADD.B #8,D1
+00001596  1C01                     448      MOVE.B D1,D6
+00001598  207C 00002BDE            449      MOVE.L #TABLE,A0
+0000159E  D1C1                     450      ADD.L D1,A0
+000015A0  23C8 00002C00            451      MOVE.L A0,ADRESSE
+000015A6  0C10 004F                452      CMP.B #'O',(A0)
+000015AA  6600 0006                453      BNE REGARDER2_O_J2
+000015AE  6000 FECC                454      BRA REPRENDRE_J2
+000015B2                           455  REGARDER2_O_J2:
+000015B2  0C10 0058                456      CMP.B #'X',(A0)
+000015B6  6600 0006                457      BNE EMPTY2_J2
+000015BA  6000 FEC0                458      BRA REPRENDRE_J2
+000015BE                           459  EMPTY2_J2:
+000015BE  10BC 004F                460      MOVE.B #'O',(A0)
+000015C2  B23C 000D                461      CMP.B #13,D1
+000015C6  6700 000E                462      BEQ METTRE_13_J2
+000015CA  B23C 000B                463      CMP.B #11,D1
+000015CE  6700 0020                464      BEQ METTRE_11_J2
+000015D2  6000 002E                465      BRA METTRE_SYMB2_J2
+000015D6                           466  METTRE_13_J2:
+000015D6  5706                     467      SUB.B #3,D6
+000015D8  207C 00002BDE            468      MOVE.L #TABLE,A0
+000015DE  D1C6                     469      ADD.L D6,A0
+000015E0  10BC 004F                470      MOVE.B #'O',(A0)
+000015E4  B23C 000B                471      CMP.B #11,D1
+000015E8  6700 0006                472      BEQ METTRE_11_J2
+000015EC  6000 0014                473      BRA METTRE_SYMB2_J2
+000015F0                           474  METTRE_11_J2:
+000015F0  5606                     475      ADD.B #3,D6
+000015F2  207C 00002BDE            476      MOVE.L #TABLE,A0
+000015F8  D1C6                     477      ADD.L D6,A0
+000015FA  10BC 004F                478      MOVE.B #'O',(A0)
+000015FE  6000 0002                479      BRA METTRE_SYMB2_J2
+00001602                           480  METTRE_SYMB2_J2:
+00001602  BE3C 0034                481      CMP.B #$34,D7
+00001606  6700 000E                482      BEQ O_case_1_0_J2
+0000160A  BE3C 0035                483      CMP.B #$35,D7
+0000160E  6700 0010                484      BEQ O_case_1_1_J2
+00001612  6000 0016                485      BRA O_case_1_2_J2
+00001616                           486  O_case_1_0_J2:
+00001616  4EB9 000029B6            487      JSR O_case_1_0
+0000161C  6000 0016                488      BRA MSUP_J2
+00001620                           489  O_case_1_1_J2:
+00001620  4EB9 00002A1C            490      JSR O_case_1_1
+00001626  6000 000C                491      BRA MSUP_J2
+0000162A                           492  O_case_1_2_J2:
+0000162A  4EB9 00002A82            493      JSR O_case_1_2
+00001630  6000 0002                494      BRA MSUP_J2
+00001634                           495  MSUP_J2:
+00001634  6000 00BA                496      BRA FINJOUEUR_J2
+00001638                           497  SUPERIEUR_J2:
+00001638  0441 0031                498      SUB #$31,D1
+0000163C  1A01                     499      MOVE.B D1,D5
+0000163E  1C01                     500      MOVE.B D1,D6
+00001640  0605 000F                501      ADD.B #15,D5
+00001644  207C 00002BDE            502      MOVE.L #TABLE,A0
+0000164A  D1C1                     503      ADD.L D1,A0
+0000164C  23C8 00002C00            504      MOVE.L A0,ADRESSE
+00001652  0C10 004F                505      CMP.B #'O',(A0)
+00001656  6600 0006                506      BNE REGARDER3_O_J2
+0000165A  6000 FE20                507      BRA REPRENDRE_J2
+0000165E                           508  REGARDER3_O_J2:
+0000165E  0C10 0058                509      CMP.B #'X',(A0)
+00001662  6600 0006                510      BNE EMPTY3_J2
+00001666  6000 FE14                511      BRA REPRENDRE_J2
+0000166A                           512  EMPTY3_J2:
+0000166A  10BC 004F                513      MOVE.B #'O',(A0)
+0000166E  207C 00002BDE            514      MOVE.L #TABLE,A0
+00001674  D1C5                     515      ADD.L D5,A0
+00001676  10BC 004F                516      MOVE.B #'O',(A0)
+0000167A  B23C 0008                517      CMP.B #8,D1
+0000167E  6700 000E                518      BEQ METTRE_8_J2
+00001682  B23C 0006                519      CMP.B #6,D1
+00001686  6700 0020                520      BEQ METTRE_6_J2
+0000168A  6000 002E                521      BRA METTRE_SYMB3_J2
+0000168E                           522  METTRE_8_J2:
+0000168E  5706                     523      SUB.B #3,D6
+00001690  207C 00002BDE            524      MOVE.L #TABLE,A0
+00001696  D1C6                     525      ADD.L D6,A0
+00001698  10BC 004F                526      MOVE.B #'O',(A0)
+0000169C  B23C 0006                527      CMP.B #6,D1
+000016A0  6700 0006                528      BEQ METTRE_6_J2
+000016A4  6000 0014                529      BRA METTRE_SYMB3_J2
+000016A8                           530  METTRE_6_J2:
+000016A8  5606                     531      ADD.B #3,D6
+000016AA  207C 00002BDE            532      MOVE.L #TABLE,A0
+000016B0  D1C6                     533      ADD.L D6,A0
+000016B2  10BC 004F                534      MOVE.B #'O',(A0)
+000016B6  6000 0002                535      BRA METTRE_SYMB3_J2
+000016BA                           536  METTRE_SYMB3_J2:
+000016BA  BE3C 0037                537      CMP.B #$37,D7
+000016BE  6700 000E                538      BEQ O_case_0_0_J2
+000016C2  BE3C 0038                539      CMP.B #$38,D7
+000016C6  6700 0010                540      BEQ O_case_0_1_J2
+000016CA  6000 0016                541      BRA O_case_0_2_J2
+000016CE                           542  O_case_0_0_J2:
+000016CE  4EB9 00002884            543      JSR O_case_0_0
+000016D4  6000 0016                544      BRA SUP_J2
+000016D8                           545  O_case_0_1_J2:
+000016D8  4EB9 000028EA            546      JSR O_case_0_1
+000016DE  6000 000C                547      BRA SUP_J2
+000016E2                           548  O_case_0_2_J2:
+000016E2  4EB9 00002950            549      JSR O_case_0_2
+000016E8  6000 0002                550      BRA SUP_J2
+000016EC                           551  SUP_J2:
+000016EC  6000 0002                552      BRA FINJOUEUR_J2
+000016F0                           553  FINJOUEUR_J2:
+000016F0                           554  *    VERIFICATION DES DES LIGNES ET COLONNES GAGNANTES
+000016F0  2279 00002C00            555      MOVE.L ADRESSE,A1
+000016F6  2479 00002C00            556      MOVE.L ADRESSE,A2
+000016FC  2679 00002C00            557      MOVE.L ADRESSE,A3
+00001702  1813                     558      MOVE.B (A3),D4
+00001704  5B89                     559      SUB.L #5,A1
+00001706  5A8A                     560      ADD.L #5,A2
+00001708  B811                     561      CMP.B (A1),D4
+0000170A  6700 0006                562      BEQ VERIFIER_COLONNE_EN_BAS_J2
+0000170E  6000 000C                563      BRA VERIFIER_LIGNE_G_J2
+00001712                           564  VERIFIER_COLONNE_EN_BAS_J2:
+00001712  B812                     565      CMP.B (A2),D4
+00001714  6700 0934                566      BEQ RESULTAT
+00001718  6000 0002                567      BRA VERIFIER_LIGNE_G_J2
+0000171C                           568  VERIFIER_LIGNE_G_J2:
+0000171C  2279 00002C00            569      MOVE.L ADRESSE,A1
+00001722  2479 00002C00            570      MOVE.L ADRESSE,A2
+00001728  2679 00002C00            571      MOVE.L ADRESSE,A3
+0000172E  1813                     572      MOVE.B (A3),D4
+00001730  5389                     573      SUB.L #1,A1
+00001732  528A                     574      ADD.L #1,A2
+00001734  B811                     575      CMP.B (A1),D4
+00001736  6700 0006                576      BEQ VERIFIER_LIGNE_J2
+0000173A  6000 000C                577      BRA CONTINUER_VERIF_D_J2
+0000173E                           578  VERIFIER_LIGNE_J2:
+0000173E  B812                     579      CMP.B (A2),D4
+00001740  6700 0908                580      BEQ RESULTAT
+00001744  6000 0002                581      BRA CONTINUER_VERIF_D_J2
+00001748                           582  CONTINUER_VERIF_D_J2:
+00001748                           583  *    VERIFICATION DES DES DIAGONALES GAGNATES
+00001748  0447 0031                584      SUB #$31,D7
+0000174C  BE3C 0006                585      CMP.B #6,D7
+00001750  6700 0016                586      BEQ VERIFIER_DIAGONALE_1_J2
+00001754  BE3C 0004                587      CMP.B #4,D7
+00001758  6700 000E                588      BEQ VERIFIER_DIAGONALE_1_J2
+0000175C  BE3C 0002                589      CMP.B #2,D7
+00001760  6700 0006                590      BEQ VERIFIER_DIAGONALE_1_J2
+00001764  6000 0040                591      BRA LAUTRE_DIAGONALE_J2
+00001768                           592  VERIFIER_DIAGONALE_1_J2:
+00001768  207C 00002BDE            593      MOVE.L #TABLE,A0
+0000176E  5C88                     594      ADD.L #6,A0
+00001770  B810                     595      CMP.B (A0),D4
+00001772  6700 0006                596      BEQ CASE_SUIV_DIA1_1_J2
+00001776  6000 002E                597      BRA LAUTRE_DIAGONALE_J2
+0000177A                           598  CASE_SUIV_DIA1_1_J2:
+0000177A  207C 00002BDE            599      MOVE.L #TABLE,A0
+00001780  D1FC 0000000C            600      ADD.L #12,A0
+00001786  B810                     601      CMP.B (A0),D4
+00001788  6700 0006                602      BEQ CASE_SUIV_DIA1_2_J2
+0000178C  6000 0018                603      BRA LAUTRE_DIAGONALE_J2
+00001790                           604  CASE_SUIV_DIA1_2_J2:
+00001790  207C 00002BDE            605      MOVE.L #TABLE,A0
+00001796  D1FC 00000012            606      ADD.L #18,A0
+0000179C  B810                     607      CMP.B (A0),D4
+0000179E  6700 08AA                608      BEQ RESULTAT
+000017A2  6000 0002                609      BRA LAUTRE_DIAGONALE_J2
+000017A6                           610  LAUTRE_DIAGONALE_J2:
+000017A6  BE3C 0008                611      CMP.B #8,D7
+000017AA  6700 0016                612      BEQ VERIFIER_DIAGONALE_2_J2
+000017AE  BE3C 0004                613      CMP.B #4,D7
+000017B2  6700 000E                614      BEQ VERIFIER_DIAGONALE_2_J2
+000017B6  BE3C 0000                615      CMP.B #0,D7
+000017BA  6700 0006                616      BEQ VERIFIER_DIAGONALE_2_J2
+000017BE  6000 0040                617      BRA CONTINUER_J2
+000017C2                           618  VERIFIER_DIAGONALE_2_J2:
+000017C2  207C 00002BDE            619      MOVE.L #TABLE,A0
+000017C8  5088                     620      ADD.L #8,A0
+000017CA  B810                     621      CMP.B (A0),D4
+000017CC  6700 0006                622      BEQ CASE_SUIV_DIA2_1_J2
+000017D0  6000 002E                623      BRA CONTINUER_J2
+000017D4                           624  CASE_SUIV_DIA2_1_J2:
+000017D4  207C 00002BDE            625      MOVE.L #TABLE,A0
+000017DA  D1FC 0000000C            626      ADD.L #12,A0
+000017E0  B810                     627      CMP.B (A0),D4
+000017E2  6700 0006                628      BEQ CASE_SUIV_DIA2_2_J2
+000017E6  6000 0018                629      BRA CONTINUER_J2
+000017EA                           630  CASE_SUIV_DIA2_2_J2:
+000017EA  207C 00002BDE            631      MOVE.L #TABLE,A0
+000017F0  D1FC 00000010            632      ADD.L #16,A0
+000017F6  B810                     633      CMP.B (A0),D4
+000017F8  6700 0850                634      BEQ RESULTAT
+000017FC  6000 0002                635      BRA CONTINUER_J2
+00001800                           636  CONTINUER_J2:
+00001800                           637  *    ON VERIFIE SI LA TABLE EST PLEINE
+00001800  207C 00002BDE            638      MOVE.L #TABLE,A0
+00001806  2608                     639      MOVE.L A0,D3
+00001808  0683 00000000            640      ADD.L #0,D3
+0000180E  207C 00002BDE            641      MOVE.L #TABLE,A0
+00001814  2808                     642      MOVE.L A0,D4
+00001816  0644 0019                643      ADD.W #25,D4
+0000181A                           644  VERIFIER_REMPLIE_J2:
+0000181A  B644                     645      CMP.W D4,D3
+0000181C  6700 0006                646      BEQ METTRE_PLEIN_J2
+00001820  6000 000E                647      BRA PAS_METTRE_PLEIN_J2
+00001824                           648  METTRE_PLEIN_J2:
+00001824  13FC 0001 00002BFC       649      MOVE.B #1,PLEIN
+0000182C  6000 081C                650      BRA RESULTAT
+00001830                           651  PAS_METTRE_PLEIN_J2:
+00001830  2043                     652      MOVE.L D3,A0
+00001832  0C10 0058                653      CMP.B #'X',(A0)
+00001836  6600 0006                654      BNE VERIFIER_O_J2
+0000183A  5243                     655      ADD.W #1,D3
+0000183C  60DC                     656      BRA VERIFIER_REMPLIE_J2
+0000183E                           657  VERIFIER_O_J2:
+0000183E  0C10 004F                658      CMP.B #'O',(A0)
+00001842  6600 0006                659      BNE FIN_VERIFIER_O_J2
+00001846  5243                     660      ADD.W #1,D3
+00001848  60D0                     661      BRA VERIFIER_REMPLIE_J2
+0000184A                           662  FIN_VERIFIER_O_J2:
+0000184A  6000 F84C                663      BRA CONTINUER_JEU
+0000184E                           664      
+0000184E                           665    
+0000184E                           666  *    CHOIX DU MODE A UN JOUEUR
+0000184E                           667  _1_JOUEUR:
+0000184E  13FC 0001 00002BFD       668      MOVE.B #1,CHOIXNJ
+00001856                           669  REPRENDRE_LE_JEU2:
+00001856  183C 0000                670      MOVE.B #0,D4
+0000185A  207C 00002BDE            671      MOVE.L #TABLE,A0
+00001860  2043                     672      MOVE.L D3,A0
+00001862  207C 00002BDE            673      MOVE.L #TABLE,A0
+00001868  10BC 0058                674      MOVE.B #'X',(A0)
+0000186C  207C 00002BDE            675      MOVE.L #TABLE,A0
+00001872  5888                     676      ADD.L #4,A0
+00001874  10BC 0058                677      MOVE.B #'X',(A0)
+00001878  207C 00002BDE            678      MOVE.L #TABLE,A0
+0000187E  D1FC 00000014            679      ADD.L #20,A0
+00001884  10BC 0058                680      MOVE.B #'X',(A0)
+00001888  207C 00002BDE            681      MOVE.L #TABLE,A0
+0000188E  D1FC 00000018            682      ADD.L #24,A0
+00001894  10BC 0058                683      MOVE.B #'X',(A0)
+00001898  4EB9 000025F2            684      JSR DESSINER_GRILLE
+0000189E                           685      
+0000189E                           686  CONTINUER_JEU2:
+0000189E                           687  *    TOUR DU PREMIER JOUEUR
+0000189E                           688  JOUEUR:
+0000189E                           689  REPRENDRE:
+0000189E  4EB9 00002760            690      JSR TOUR_X
+000018A4  13FC 0000 00002BFC       691      MOVE.B #0,PLEIN
+000018AC  323C 0000                692      MOVE.W #$0000,D1
+000018B0  4EB9 000021F4            693      JSR POS_CURS
+000018B6  13FC 0001 00002BFE       694      MOVE.B #1,J1_J2
+000018BE  7200                     695      MOVE.L #$0,D1
+000018C0  7600                     696      MOVE.L #$0,D3
+000018C2  7800                     697      MOVE.L #$0,D4
+000018C4  7A00                     698      MOVE.L #$0,D5
+000018C6  7C00                     699      MOVE.L #$0,D6
+000018C8                           700  *    CHOIX DE LA CASE ET VERIFICATION DE SA VALIDITER
+000018C8  4EB9 000021FC            701      JSR SAISCAR
+000018CE  1E01                     702      MOVE.B D1,D7
+000018D0  BE3C 0030                703      CMP.B #$30,D7
+000018D4  6A00 0004                704      BPL SUPERIEUR_A30
+000018D8  60C4                     705      BRA REPRENDRE
+000018DA                           706  SUPERIEUR_A30
+000018DA  BE3C 003A                707      CMP.B #$3A,D7
+000018DE  6ABE                     708      BPL REPRENDRE
+000018E0  B27C 0037                709      CMP #$37,D1
+000018E4  6A00 0174                710      BPL SUPERIEUR
+000018E8                           711  INFERIEUR:
+000018E8  B27C 0034                712      CMP #$34,D1
+000018EC  6A00 00C4                713      BPL MINISUPERIEUR
+000018F0                           714  MINIINFERIEUR:
+000018F0  0441 0031                715      SUB #$31,D1
+000018F4  0601 0010                716      ADD.B #16,D1
+000018F8  1A01                     717      MOVE.B D1,D5
+000018FA  1C01                     718      MOVE.B D1,D6
+000018FC  0445 000F                719      SUB #15,D5
+00001900  207C 00002BDE            720      MOVE.L #TABLE,A0
+00001906  D1C1                     721      ADD.L D1,A0
+00001908  23C8 00002C00            722      MOVE.L A0,ADRESSE
+0000190E  0C10 0058                723      CMP.B #'X',(A0)
+00001912  6600 0004                724      BNE REGARDER1_O
+00001916  6086                     725      BRA REPRENDRE
+00001918                           726  REGARDER1_O:
+00001918  0C10 004F                727      CMP.B #'O',(A0)
+0000191C  6600 0006                728      BNE EMPTY1
+00001920  6000 FF7C                729      BRA REPRENDRE
+00001924                           730  EMPTY1:
+00001924  10BC 0058                731      MOVE.B #'X',(A0)
+00001928  207C 00002BDE            732      MOVE.L #TABLE,A0
+0000192E  D1C5                     733      ADD.L D5,A0
+00001930  10BC 0058                734      MOVE.B #'X',(A0)
+00001934  B23C 0012                735      CMP.B #18,D1
+00001938  6700 000E                736      BEQ METTRE_18
+0000193C  B23C 0010                737      CMP.B #16,D1
+00001940  6700 0020                738      BEQ METTRE_16
+00001944  6000 002E                739      BRA METTRE_SYMB1
+00001948                           740  METTRE_18:
+00001948  5706                     741      SUB.B #3,D6
+0000194A  207C 00002BDE            742      MOVE.L #TABLE,A0
+00001950  D1C6                     743      ADD.L D6,A0
+00001952  10BC 0058                744      MOVE.B #'X',(A0)
+00001956  B23C 0010                745      CMP.B #16,D1
+0000195A  6700 F80C                746      BEQ METTRE_16_J1
+0000195E  6000 0014                747      BRA METTRE_SYMB1
+00001962                           748  METTRE_16:
+00001962  5606                     749      ADD.B #3,D6
+00001964  207C 00002BDE            750      MOVE.L #TABLE,A0
+0000196A  D1C6                     751      ADD.L D6,A0
+0000196C  10BC 0058                752      MOVE.B #'X',(A0)
+00001970  6000 0002                753      BRA METTRE_SYMB1
+00001974                           754  METTRE_SYMB1:
+00001974  BE3C 0031                755      CMP.B #$31,D7
+00001978  6700 0016                756      BEQ X_case_2_0_J
+0000197C  BE3C 0032                757      CMP.B #$32,D7
+00001980  6700 0018                758      BEQ X_case_2_1_J
+00001984  BE3C 0033                759      CMP.B #$33,D7
+00001988  6700 001A                760      BEQ X_case_2_2_J
+0000198C  6000 0020                761      BRA NSUP
+00001990                           762  X_case_2_0_J:
+00001990  4EB9 00002AAC            763      JSR X_case_2_0
+00001996  6000 0016                764      BRA NSUP
+0000199A                           765  X_case_2_1_J:
+0000199A  4EB9 00002B12            766      JSR X_case_2_1
+000019A0  6000 000C                767      BRA NSUP
+000019A4                           768  X_case_2_2_J:
+000019A4  4EB9 00002B78            769      JSR X_case_2_2
+000019AA  6000 0002                770      BRA NSUP
+000019AE                           771  NSUP:
+000019AE  6000 0162                772      BRA FINJOUEUR
+000019B2                           773  MINISUPERIEUR:
+000019B2  0441 0031                774      SUB #$31,D1
+000019B6  5001                     775      ADD.B #8,D1
+000019B8  1C01                     776      MOVE.B D1,D6
+000019BA  207C 00002BDE            777      MOVE.L #TABLE,A0
+000019C0  D1C1                     778      ADD.L D1,A0
+000019C2  23C8 00002C00            779      MOVE.L A0,ADRESSE
+000019C8  0C10 0058                780      CMP.B #'X',(A0)
+000019CC  6600 0006                781      BNE REGARDER2_O
+000019D0  6000 FECC                782      BRA REPRENDRE
+000019D4                           783  REGARDER2_O:
+000019D4  0C10 004F                784      CMP.B #'O',(A0)
+000019D8  6600 0006                785      BNE EMPTY2
+000019DC  6000 FEC0                786      BRA REPRENDRE
+000019E0                           787  EMPTY2:
+000019E0  10BC 0058                788      MOVE.B #'X',(A0)
+000019E4  B23C 000D                789      CMP.B #13,D1
+000019E8  6700 000E                790      BEQ METTRE_13
+000019EC  B23C 000B                791      CMP.B #11,D1
+000019F0  6700 0020                792      BEQ METTRE_11
+000019F4  6000 002E                793      BRA METTRE_SYMB2
+000019F8                           794  METTRE_13:
+000019F8  5706                     795      SUB.B #3,D6
+000019FA  207C 00002BDE            796      MOVE.L #TABLE,A0
+00001A00  D1C6                     797      ADD.L D6,A0
+00001A02  10BC 0058                798      MOVE.B #'X',(A0)
+00001A06  B23C 000B                799      CMP.B #11,D1
+00001A0A  6700 0006                800      BEQ METTRE_11
+00001A0E  6000 0014                801      BRA METTRE_SYMB2
+00001A12                           802  METTRE_11:
+00001A12  5606                     803      ADD.B #3,D6
+00001A14  207C 00002BDE            804      MOVE.L #TABLE,A0
+00001A1A  D1C6                     805      ADD.L D6,A0
+00001A1C  10BC 0058                806      MOVE.B #'X',(A0)
+00001A20  6000 0002                807      BRA METTRE_SYMB2
+00001A24                           808  METTRE_SYMB2:
+00001A24  BE3C 0034                809      CMP.B #$34,D7
+00001A28  6700 000E                810      BEQ X_case_1_0_J
+00001A2C  BE3C 0035                811      CMP.B #$35,D7
+00001A30  6700 0010                812      BEQ X_case_1_1_J
+00001A34  6000 0016                813      BRA X_case_1_2_J
+00001A38                           814  X_case_1_0_J:
+00001A38  4EB9 0000297A            815      JSR X_case_1_0
+00001A3E  6000 0016                816      BRA MSUP
+00001A42                           817  X_case_1_1_J:
+00001A42  4EB9 000029E0            818      JSR X_case_1_1
+00001A48  6000 000C                819      BRA MSUP
+00001A4C                           820  X_case_1_2_J:
+00001A4C  4EB9 00002A46            821      JSR X_case_1_2
+00001A52  6000 0002                822      BRA MSUP
+00001A56                           823  MSUP:
+00001A56  6000 00BA                824      BRA FINJOUEUR
+00001A5A                           825  SUPERIEUR:
+00001A5A  0441 0031                826      SUB #$31,D1
+00001A5E  1A01                     827      MOVE.B D1,D5
+00001A60  1C01                     828      MOVE.B D1,D6
+00001A62  0605 000F                829      ADD.B #15,D5
+00001A66  207C 00002BDE            830      MOVE.L #TABLE,A0
+00001A6C  D1C1                     831      ADD.L D1,A0
+00001A6E  23C8 00002C00            832      MOVE.L A0,ADRESSE
+00001A74  0C10 0058                833      CMP.B #'X',(A0)
+00001A78  6600 0006                834      BNE REGARDER3_O
+00001A7C  6000 FE20                835      BRA REPRENDRE
+00001A80                           836  REGARDER3_O:
+00001A80  0C10 004F                837      CMP.B #'O',(A0)
+00001A84  6600 0006                838      BNE EMPTY3
+00001A88  6000 FE14                839      BRA REPRENDRE
+00001A8C                           840  EMPTY3:
+00001A8C  10BC 0058                841      MOVE.B #'X',(A0)
+00001A90  207C 00002BDE            842      MOVE.L #TABLE,A0
+00001A96  D1C5                     843      ADD.L D5,A0
+00001A98  10BC 0058                844      MOVE.B #'X',(A0)
+00001A9C  B23C 0008                845      CMP.B #8,D1
+00001AA0  6700 000E                846      BEQ METTRE_8
+00001AA4  B23C 0006                847      CMP.B #6,D1
+00001AA8  6700 0020                848      BEQ METTRE_6
+00001AAC  6000 002E                849      BRA METTRE_SYMB3
+00001AB0                           850  METTRE_8:
+00001AB0  5706                     851      SUB.B #3,D6
+00001AB2  207C 00002BDE            852      MOVE.L #TABLE,A0
+00001AB8  D1C6                     853      ADD.L D6,A0
+00001ABA  10BC 0058                854      MOVE.B #'X',(A0)
+00001ABE  B23C 0006                855      CMP.B #6,D1
+00001AC2  6700 0006                856      BEQ METTRE_6
+00001AC6  6000 0014                857      BRA METTRE_SYMB3
+00001ACA                           858  METTRE_6:
+00001ACA  5606                     859      ADD.B #3,D6
+00001ACC  207C 00002BDE            860      MOVE.L #TABLE,A0
+00001AD2  D1C6                     861      ADD.L D6,A0
+00001AD4  10BC 0058                862      MOVE.B #'X',(A0)
+00001AD8  6000 0002                863      BRA METTRE_SYMB3
+00001ADC                           864  METTRE_SYMB3:
+00001ADC  BE3C 0037                865      CMP.B #$37,D7
+00001AE0  6700 000E                866      BEQ X_case_0_0_J
+00001AE4  BE3C 0038                867      CMP.B #$38,D7
+00001AE8  6700 0010                868      BEQ X_case_0_1_J
+00001AEC  6000 0016                869      BRA X_case_0_2_J
+00001AF0                           870  X_case_0_0_J:
+00001AF0  4EB9 00002848            871      JSR X_case_0_0
+00001AF6  6000 0016                872      BRA SUP
+00001AFA                           873  X_case_0_1_J:
+00001AFA  4EB9 000028AE            874      JSR X_case_0_1
+00001B00  6000 000C                875      BRA SUP
+00001B04                           876  X_case_0_2_J:
+00001B04  4EB9 00002914            877      JSR X_case_0_2
+00001B0A  6000 0002                878      BRA SUP
+00001B0E                           879  SUP:
+00001B0E  6000 0002                880      BRA FINJOUEUR
+00001B12                           881  FINJOUEUR:
+00001B12                           882  *    VERIFIATION DES LIGNES ET COLONNES GAGNANTE
+00001B12  2279 00002C00            883      MOVE.L ADRESSE,A1
+00001B18  2479 00002C00            884      MOVE.L ADRESSE,A2
+00001B1E  2679 00002C00            885      MOVE.L ADRESSE,A3
+00001B24  1813                     886      MOVE.B (A3),D4
+00001B26  5B89                     887      SUB.L #5,A1
+00001B28  5A8A                     888      ADD.L #5,A2
+00001B2A  B811                     889      CMP.B (A1),D4
+00001B2C  6700 0006                890      BEQ VERIFIER_COLONNE_EN_BAS
+00001B30  6000 000C                891      BRA VERIFIER_LIGNE_G
+00001B34                           892  VERIFIER_COLONNE_EN_BAS:
+00001B34  B812                     893      CMP.B (A2),D4
+00001B36  6700 0512                894      BEQ RESULTAT
+00001B3A  6000 0002                895      BRA VERIFIER_LIGNE_G
+00001B3E                           896  VERIFIER_LIGNE_G:
+00001B3E  2279 00002C00            897      MOVE.L ADRESSE,A1
+00001B44  2479 00002C00            898      MOVE.L ADRESSE,A2
+00001B4A  2679 00002C00            899      MOVE.L ADRESSE,A3
+00001B50  1813                     900      MOVE.B (A3),D4
+00001B52  5389                     901      SUB.L #1,A1
+00001B54  528A                     902      ADD.L #1,A2
+00001B56  B811                     903      CMP.B (A1),D4
+00001B58  6700 0006                904      BEQ VERIFIER_LIGNE_D
+00001B5C  6000 000C                905      BRA CONTINUER_VERIF_D
+00001B60                           906  VERIFIER_LIGNE_D:
+00001B60  B812                     907      CMP.B (A2),D4
+00001B62  6700 04E6                908      BEQ RESULTAT
+00001B66  6000 0002                909      BRA CONTINUER_VERIF_D
+00001B6A                           910  CONTINUER_VERIF_D:
+00001B6A                           911  *    VERIFIATION DES DIAGONALES GAGNANTE
+00001B6A  0447 0031                912      SUB #$31,D7
+00001B6E  BE3C 0006                913      CMP.B #6,D7
+00001B72  6700 0016                914      BEQ VERIFIER_DIAGONALE_1
+00001B76  BE3C 0004                915      CMP.B #4,D7
+00001B7A  6700 000E                916      BEQ VERIFIER_DIAGONALE_1
+00001B7E  BE3C 0002                917      CMP.B #2,D7
+00001B82  6700 0006                918      BEQ VERIFIER_DIAGONALE_1
+00001B86  6000 0040                919      BRA LAUTRE_DIAGONALE
+00001B8A                           920  VERIFIER_DIAGONALE_1:
+00001B8A  207C 00002BDE            921      MOVE.L #TABLE,A0
+00001B90  5C88                     922      ADD.L #6,A0
+00001B92  B810                     923      CMP.B (A0),D4
+00001B94  6700 0006                924      BEQ CASE_SUIV_DIA1_1
+00001B98  6000 002E                925      BRA LAUTRE_DIAGONALE
+00001B9C                           926  CASE_SUIV_DIA1_1:
+00001B9C  207C 00002BDE            927      MOVE.L #TABLE,A0
+00001BA2  D1FC 0000000C            928      ADD.L #12,A0
+00001BA8  B810                     929      CMP.B (A0),D4
+00001BAA  6700 0006                930      BEQ CASE_SUIV_DIA1_2
+00001BAE  6000 0018                931      BRA LAUTRE_DIAGONALE
+00001BB2                           932  CASE_SUIV_DIA1_2:
+00001BB2  207C 00002BDE            933      MOVE.L #TABLE,A0
+00001BB8  D1FC 00000012            934      ADD.L #18,A0
+00001BBE  B810                     935      CMP.B (A0),D4
+00001BC0  6700 0488                936      BEQ RESULTAT
+00001BC4  6000 0002                937      BRA LAUTRE_DIAGONALE
+00001BC8                           938  LAUTRE_DIAGONALE:
+00001BC8  BE3C 0008                939      CMP.B #8,D7
+00001BCC  6700 0016                940      BEQ VERIFIER_DIAGONALE_2
+00001BD0  BE3C 0004                941      CMP.B #4,D7
+00001BD4  6700 000E                942      BEQ VERIFIER_DIAGONALE_2
+00001BD8  BE3C 0000                943      CMP.B #0,D7
+00001BDC  6700 0006                944      BEQ VERIFIER_DIAGONALE_2
+00001BE0  6000 0040                945      BRA CONTINUER
+00001BE4                           946  VERIFIER_DIAGONALE_2:
+00001BE4  207C 00002BDE            947      MOVE.L #TABLE,A0
+00001BEA  5088                     948      ADD.L #8,A0
+00001BEC  B810                     949      CMP.B (A0),D4
+00001BEE  6700 0006                950      BEQ CASE_SUIV_DIA2_1
+00001BF2  6000 002E                951      BRA CONTINUER
+00001BF6                           952  CASE_SUIV_DIA2_1:
+00001BF6  207C 00002BDE            953      MOVE.L #TABLE,A0
+00001BFC  D1FC 0000000C            954      ADD.L #12,A0
+00001C02  B810                     955      CMP.B (A0),D4
+00001C04  6700 0006                956      BEQ CASE_SUIV_DIA2_2
+00001C08  6000 0018                957      BRA CONTINUER
+00001C0C                           958  CASE_SUIV_DIA2_2:
+00001C0C  207C 00002BDE            959      MOVE.L #TABLE,A0
+00001C12  D1FC 00000010            960      ADD.L #16,A0
+00001C18  B810                     961      CMP.B (A0),D4
+00001C1A  6700 042E                962      BEQ RESULTAT
+00001C1E  6000 0002                963      BRA CONTINUER
+00001C22                           964  CONTINUER:
+00001C22                           965  *    ON VERIFIE SI LA TABLE EST PLEINE OU PAS 
+00001C22  207C 00002BDE            966      MOVE.L #TABLE,A0
+00001C28  2608                     967      MOVE.L A0,D3
+00001C2A  0603 0000                968      ADD.B #0,D3
+00001C2E  207C 00002BDE            969      MOVE.L #TABLE,A0
+00001C34  2808                     970      MOVE.L A0,D4
+00001C36  0644 0019                971      ADD.W #25,D4
+00001C3A                           972  VERIFIER_REMPLIE:
+00001C3A  B644                     973      CMP.W D4,D3
+00001C3C  6700 0006                974      BEQ METTRE_PLEIN
+00001C40  6000 000E                975      BRA PAS_METTRE_PLEIN
+00001C44                           976  METTRE_PLEIN:
+00001C44  13FC 0001 00002BFC       977      MOVE.B #1,PLEIN
+00001C4C  6000 03FC                978      BRA RESULTAT
+00001C50                           979  PAS_METTRE_PLEIN:
+00001C50  2043                     980      MOVE.L D3,A0
+00001C52  0C10 0058                981      CMP.B #'X',(A0)
+00001C56  6600 0006                982      BNE VERIFIER_O
+00001C5A  5243                     983      ADD.W #1,D3
+00001C5C  60DC                     984      BRA VERIFIER_REMPLIE
+00001C5E                           985  VERIFIER_O:
+00001C5E  0C10 004F                986      CMP.B #'O',(A0)
+00001C62  6600 0006                987      BNE FIN_VERIFIER_O
+00001C66  5243                     988      ADD.W #1,D3
+00001C68  60D0                     989      BRA VERIFIER_REMPLIE
+00001C6A                           990  FIN_VERIFIER_O:
+00001C6A                           991  
+00001C6A                           992  *    TOUR DE L'ORDIANTEUR
+00001C6A                           993  ORDI:
+00001C6A                           994  REPRENDRE_O
+00001C6A  4EB9 000027D4            995      JSR TOUR_O
+00001C70  13FC 0000 00002BFC       996      MOVE.B #0,PLEIN
+00001C78  323C 0000                997      MOVE.W #$0000,D1
+00001C7C  4EB9 000021F4            998      JSR POS_CURS
+00001C82  13FC 0000 00002BFE       999      MOVE.B #0,J1_J2
+00001C8A  7200                    1000      MOVE.L #$0,D1
+00001C8C  7600                    1001      MOVE.L #$0,D3
+00001C8E  7800                    1002      MOVE.L #$0,D4
+00001C90  7A00                    1003      MOVE.L #$0,D5
+00001C92  7C00                    1004      MOVE.L #$0,D6
+00001C94                          1005  *    LE COIX DE LA CASE SE FAIT AVEC L'APPELE SYSTEME GET TIME 
+00001C94  4EB9 000021EC           1006      JSR GET_TIME
+00001C9A  C2BC 0000000F           1007      AND.L #$0000000F,D1
+00001CA0  0681 00000031           1008      ADD.L #$31,D1
+00001CA6  1E01                    1009      MOVE.B D1,D7
+00001CA8  BE3C 0030               1010      CMP.B #$30,D7
+00001CAC  6A00 0004               1011      BPL SUPERIEUR_A30_O
+00001CB0  60B8                    1012      BRA REPRENDRE_O
+00001CB2                          1013  SUPERIEUR_A30_O
+00001CB2  BE3C 003A               1014      CMP.B #$3A,D7
+00001CB6  6AB2                    1015      BPL REPRENDRE_O
+00001CB8  B27C 0037               1016      CMP #$37,D1
+00001CBC  6A00 0176               1017      BPL SUPERIEUR_O
+00001CC0                          1018  INFERIEUR_O:
+00001CC0  B27C 0034               1019      CMP #$34,D1
+00001CC4  6A00 00C6               1020      BPL MINISUPERIEUR_O
+00001CC8                          1021  MINIINFERIEUR_O:
+00001CC8  0441 0031               1022      SUB #$31,D1
+00001CCC  0601 0010               1023      ADD.B #16,D1
+00001CD0  1A01                    1024      MOVE.B D1,D5
+00001CD2  1C01                    1025      MOVE.B D1,D6
+00001CD4  0445 000F               1026      SUB #15,D5
+00001CD8  207C 00002BDE           1027      MOVE.L #TABLE,A0
+00001CDE  D1C1                    1028      ADD.L D1,A0
+00001CE0  23C8 00002C00           1029      MOVE.L A0,ADRESSE
+00001CE6  0C10 004F               1030      CMP.B #'O',(A0)
+00001CEA  6600 0006               1031      BNE REGARDER1_O_O
+00001CEE  6000 FF7A               1032      BRA REPRENDRE_O
+00001CF2                          1033  REGARDER1_O_O:
+00001CF2  0C10 0058               1034      CMP.B #'X',(A0)
+00001CF6  6600 0006               1035      BNE EMPTY1_O
+00001CFA  6000 FF6E               1036      BRA REPRENDRE_O
+00001CFE                          1037  EMPTY1_O:
+00001CFE  10BC 004F               1038      MOVE.B #'O',(A0)
+00001D02  207C 00002BDE           1039      MOVE.L #TABLE,A0
+00001D08  D1C5                    1040      ADD.L D5,A0
+00001D0A  10BC 004F               1041      MOVE.B #'O',(A0)
+00001D0E  B23C 0012               1042      CMP.B #18,D1
+00001D12  6700 000E               1043      BEQ METTRE_18_O
+00001D16  B23C 0010               1044      CMP.B #16,D1
+00001D1A  6700 0020               1045      BEQ METTRE_16_O
+00001D1E  6000 002E               1046      BRA METTRE_SYMB1_O
+00001D22                          1047  METTRE_18_O:
+00001D22  5706                    1048      SUB.B #3,D6
+00001D24  207C 00002BDE           1049      MOVE.L #TABLE,A0
+00001D2A  D1C6                    1050      ADD.L D6,A0
+00001D2C  10BC 004F               1051      MOVE.B #'O',(A0)
+00001D30  B23C 0010               1052      CMP.B #16,D1
+00001D34  6700 F80A               1053      BEQ METTRE_16_J2
+00001D38  6000 0014               1054      BRA METTRE_SYMB1_O
+00001D3C                          1055  METTRE_16_O:
+00001D3C  5606                    1056      ADD.B #3,D6
+00001D3E  207C 00002BDE           1057      MOVE.L #TABLE,A0
+00001D44  D1C6                    1058      ADD.L D6,A0
+00001D46  10BC 004F               1059      MOVE.B #'O',(A0)
+00001D4A  6000 0002               1060      BRA METTRE_SYMB1_O
+00001D4E                          1061  METTRE_SYMB1_O:
+00001D4E  BE3C 0031               1062      CMP.B #$31,D7
+00001D52  6700 0016               1063      BEQ O_case_2_0_O
+00001D56  BE3C 0032               1064      CMP.B #$32,D7
+00001D5A  6700 0018               1065      BEQ O_case_2_1_O
+00001D5E  BE3C 0033               1066      CMP.B #$33,D7
+00001D62  6700 001A               1067      BEQ O_case_2_2_O
+00001D66  6000 0020               1068      BRA NSUP_O
+00001D6A                          1069  O_case_2_0_O:
+00001D6A  4EB9 00002AE8           1070      JSR O_case_2_0
+00001D70  6000 0016               1071      BRA NSUP_O
+00001D74                          1072  O_case_2_1_O:
+00001D74  4EB9 00002B4E           1073      JSR O_case_2_1
+00001D7A  6000 000C               1074      BRA NSUP_O
+00001D7E                          1075  O_case_2_2_O:
+00001D7E  4EB9 00002BB4           1076      JSR O_case_2_2
+00001D84  6000 0002               1077      BRA NSUP_O
+00001D88                          1078  NSUP_O:
+00001D88  6000 0162               1079      BRA FINJOUEUR_O
+00001D8C                          1080  MINISUPERIEUR_O:
+00001D8C  0441 0031               1081      SUB #$31,D1
+00001D90  5001                    1082      ADD.B #8,D1
+00001D92  1C01                    1083      MOVE.B D1,D6
+00001D94  207C 00002BDE           1084      MOVE.L #TABLE,A0
+00001D9A  D1C1                    1085      ADD.L D1,A0
+00001D9C  23C8 00002C00           1086      MOVE.L A0,ADRESSE
+00001DA2  0C10 004F               1087      CMP.B #'O',(A0)
+00001DA6  6600 0006               1088      BNE REGARDER2_O_O
+00001DAA  6000 FEBE               1089      BRA REPRENDRE_O
+00001DAE                          1090  REGARDER2_O_O:
+00001DAE  0C10 0058               1091      CMP.B #'X',(A0)
+00001DB2  6600 0006               1092      BNE EMPTY2_O
+00001DB6  6000 FEB2               1093      BRA REPRENDRE_O
+00001DBA                          1094  EMPTY2_O:
+00001DBA  10BC 004F               1095      MOVE.B #'O',(A0)
+00001DBE  B23C 000D               1096      CMP.B #13,D1
+00001DC2  6700 000E               1097      BEQ METTRE_13_O
+00001DC6  B23C 000B               1098      CMP.B #11,D1
+00001DCA  6700 0020               1099      BEQ METTRE_11_O
+00001DCE  6000 002E               1100      BRA METTRE_SYMB2_O
+00001DD2                          1101  METTRE_13_O:
+00001DD2  5706                    1102      SUB.B #3,D6
+00001DD4  207C 00002BDE           1103      MOVE.L #TABLE,A0
+00001DDA  D1C6                    1104      ADD.L D6,A0
+00001DDC  10BC 004F               1105      MOVE.B #'O',(A0)
+00001DE0  B23C 000B               1106      CMP.B #11,D1
+00001DE4  6700 0006               1107      BEQ METTRE_11_O
+00001DE8  6000 0014               1108      BRA METTRE_SYMB2_O
+00001DEC                          1109  METTRE_11_O:
+00001DEC  5606                    1110      ADD.B #3,D6
+00001DEE  207C 00002BDE           1111      MOVE.L #TABLE,A0
+00001DF4  D1C6                    1112      ADD.L D6,A0
+00001DF6  10BC 004F               1113      MOVE.B #'O',(A0)
+00001DFA  6000 0002               1114      BRA METTRE_SYMB2_O
+00001DFE                          1115  METTRE_SYMB2_O:
+00001DFE  BE3C 0034               1116      CMP.B #$34,D7
+00001E02  6700 000E               1117      BEQ O_case_1_0_O
+00001E06  BE3C 0035               1118      CMP.B #$35,D7
+00001E0A  6700 0010               1119      BEQ O_case_1_1_O
+00001E0E  6000 0016               1120      BRA O_case_1_2_O
+00001E12                          1121  O_case_1_0_O:
+00001E12  4EB9 000029B6           1122      JSR O_case_1_0
+00001E18  6000 0016               1123      BRA MSUP_O
+00001E1C                          1124  O_case_1_1_O:
+00001E1C  4EB9 00002A1C           1125      JSR O_case_1_1
+00001E22  6000 000C               1126      BRA MSUP_O
+00001E26                          1127  O_case_1_2_O:
+00001E26  4EB9 00002A82           1128      JSR O_case_1_2
+00001E2C  6000 0002               1129      BRA MSUP_O
+00001E30                          1130  MSUP_O:
+00001E30  6000 00BA               1131      BRA FINJOUEUR_O
+00001E34                          1132  SUPERIEUR_O:
+00001E34  0441 0031               1133      SUB #$31,D1
+00001E38  1A01                    1134      MOVE.B D1,D5
+00001E3A  1C01                    1135      MOVE.B D1,D6
+00001E3C  0605 000F               1136      ADD.B #15,D5
+00001E40  207C 00002BDE           1137      MOVE.L #TABLE,A0
+00001E46  D1C1                    1138      ADD.L D1,A0
+00001E48  23C8 00002C00           1139      MOVE.L A0,ADRESSE
+00001E4E  0C10 004F               1140      CMP.B #'O',(A0)
+00001E52  6600 0006               1141      BNE REGARDER3_O_O
+00001E56  6000 FE12               1142      BRA REPRENDRE_O
+00001E5A                          1143  REGARDER3_O_O:
+00001E5A  0C10 0058               1144      CMP.B #'X',(A0)
+00001E5E  6600 0006               1145      BNE EMPTY3_O
+00001E62  6000 FE06               1146      BRA REPRENDRE_O
+00001E66                          1147  EMPTY3_O:
+00001E66  10BC 004F               1148      MOVE.B #'O',(A0)
+00001E6A  207C 00002BDE           1149      MOVE.L #TABLE,A0
+00001E70  D1C5                    1150      ADD.L D5,A0
+00001E72  10BC 004F               1151      MOVE.B #'O',(A0)
+00001E76  B23C 0008               1152      CMP.B #8,D1
+00001E7A  6700 000E               1153      BEQ METTRE_8_O
+00001E7E  B23C 0006               1154      CMP.B #6,D1
+00001E82  6700 0020               1155      BEQ METTRE_6_O
+00001E86  6000 002E               1156      BRA METTRE_SYMB3_O
+00001E8A                          1157  METTRE_8_O:
+00001E8A  5706                    1158      SUB.B #3,D6
+00001E8C  207C 00002BDE           1159      MOVE.L #TABLE,A0
+00001E92  D1C6                    1160      ADD.L D6,A0
+00001E94  10BC 004F               1161      MOVE.B #'O',(A0)
+00001E98  B23C 0006               1162      CMP.B #6,D1
+00001E9C  6700 0006               1163      BEQ METTRE_6_O
+00001EA0  6000 0014               1164      BRA METTRE_SYMB3_O
+00001EA4                          1165  METTRE_6_O:
+00001EA4  5606                    1166      ADD.B #3,D6
+00001EA6  207C 00002BDE           1167      MOVE.L #TABLE,A0
+00001EAC  D1C6                    1168      ADD.L D6,A0
+00001EAE  10BC 004F               1169      MOVE.B #'O',(A0)
+00001EB2  6000 0002               1170      BRA METTRE_SYMB3_O
+00001EB6                          1171  METTRE_SYMB3_O:
+00001EB6  BE3C 0037               1172      CMP.B #$37,D7
+00001EBA  6700 000E               1173      BEQ O_case_0_0_O
+00001EBE  BE3C 0038               1174      CMP.B #$38,D7
+00001EC2  6700 0010               1175      BEQ O_case_0_1_O
+00001EC6  6000 0016               1176      BRA O_case_0_2_O
+00001ECA                          1177  O_case_0_0_O:
+00001ECA  4EB9 00002884           1178      JSR O_case_0_0
+00001ED0  6000 0016               1179      BRA SUP_O
+00001ED4                          1180  O_case_0_1_O:
+00001ED4  4EB9 000028EA           1181      JSR O_case_0_1
+00001EDA  6000 000C               1182      BRA SUP_O
+00001EDE                          1183  O_case_0_2_O:
+00001EDE  4EB9 00002950           1184      JSR O_case_0_2
+00001EE4  6000 0002               1185      BRA SUP_O
+00001EE8                          1186  SUP_O:
+00001EE8  6000 0002               1187      BRA FINJOUEUR_O
+00001EEC                          1188  FINJOUEUR_O:
+00001EEC                          1189  *    VERIFICATION DES LIGNES ET COLONNES GAGNANTE
+00001EEC  2279 00002C00           1190      MOVE.L ADRESSE,A1
+00001EF2  2479 00002C00           1191      MOVE.L ADRESSE,A2
+00001EF8  2679 00002C00           1192      MOVE.L ADRESSE,A3
+00001EFE  1813                    1193      MOVE.B (A3),D4
+00001F00  5B89                    1194      SUB.L #5,A1
+00001F02  5A8A                    1195      ADD.L #5,A2
+00001F04  B811                    1196      CMP.B (A1),D4
+00001F06  6700 0006               1197      BEQ VERIFIER_COLONNE_EN_BAS_O
+00001F0A  6000 000C               1198      BRA VERIFIER_LIGNE_G_O
+00001F0E                          1199  VERIFIER_COLONNE_EN_BAS_O:
+00001F0E  B812                    1200      CMP.B (A2),D4
+00001F10  6700 0138               1201      BEQ RESULTAT
+00001F14  6000 0002               1202      BRA VERIFIER_LIGNE_G_O
+00001F18                          1203  VERIFIER_LIGNE_G_O:
+00001F18  2279 00002C00           1204      MOVE.L ADRESSE,A1
+00001F1E  2479 00002C00           1205      MOVE.L ADRESSE,A2
+00001F24  2679 00002C00           1206      MOVE.L ADRESSE,A3
+00001F2A  1813                    1207      MOVE.B (A3),D4
+00001F2C  5389                    1208      SUB.L #1,A1
+00001F2E  528A                    1209      ADD.L #1,A2
+00001F30  B811                    1210      CMP.B (A1),D4
+00001F32  6700 0006               1211      BEQ VERIFIER_LIGNE_O
+00001F36  6000 000C               1212      BRA CONTINUER_VERIF_D_O
+00001F3A                          1213  VERIFIER_LIGNE_O:
+00001F3A  B812                    1214      CMP.B (A2),D4
+00001F3C  6700 010C               1215      BEQ RESULTAT
+00001F40  6000 0002               1216      BRA CONTINUER_VERIF_D_O
+00001F44                          1217  CONTINUER_VERIF_D_O:
+00001F44                          1218  *    VERIFICATION DES DIAGONALES GAGNANTE
+00001F44  0447 0031               1219      SUB #$31,D7
+00001F48  BE3C 0006               1220      CMP.B #6,D7
+00001F4C  6700 0016               1221      BEQ VERIFIER_DIAGONALE_1_O
+00001F50  BE3C 0004               1222      CMP.B #4,D7
+00001F54  6700 000E               1223      BEQ VERIFIER_DIAGONALE_1_O
+00001F58  BE3C 0002               1224      CMP.B #2,D7
+00001F5C  6700 0006               1225      BEQ VERIFIER_DIAGONALE_1_O
+00001F60  6000 0040               1226      BRA LAUTRE_DIAGONALE_O
+00001F64                          1227  VERIFIER_DIAGONALE_1_O:
+00001F64  207C 00002BDE           1228      MOVE.L #TABLE,A0
+00001F6A  5C88                    1229      ADD.L #6,A0
+00001F6C  B810                    1230      CMP.B (A0),D4
+00001F6E  6700 0006               1231      BEQ CASE_SUIV_DIA1_1_O
+00001F72  6000 002E               1232      BRA LAUTRE_DIAGONALE_O
+00001F76                          1233  CASE_SUIV_DIA1_1_O:
+00001F76  207C 00002BDE           1234      MOVE.L #TABLE,A0
+00001F7C  D1FC 0000000C           1235      ADD.L #12,A0
+00001F82  B810                    1236      CMP.B (A0),D4
+00001F84  6700 0006               1237      BEQ CASE_SUIV_DIA1_2_O
+00001F88  6000 0018               1238      BRA LAUTRE_DIAGONALE_O
+00001F8C                          1239  CASE_SUIV_DIA1_2_O:
+00001F8C  207C 00002BDE           1240      MOVE.L #TABLE,A0
+00001F92  D1FC 00000012           1241      ADD.L #18,A0
+00001F98  B810                    1242      CMP.B (A0),D4
+00001F9A  6700 00AE               1243      BEQ RESULTAT
+00001F9E  6000 0002               1244      BRA LAUTRE_DIAGONALE_O
+00001FA2                          1245  LAUTRE_DIAGONALE_O:
+00001FA2  BE3C 0008               1246      CMP.B #8,D7
+00001FA6  6700 0016               1247      BEQ VERIFIER_DIAGONALE_2_O
+00001FAA  BE3C 0004               1248      CMP.B #4,D7
+00001FAE  6700 000E               1249      BEQ VERIFIER_DIAGONALE_2_O
+00001FB2  BE3C 0000               1250      CMP.B #0,D7
+00001FB6  6700 0006               1251      BEQ VERIFIER_DIAGONALE_2_O
+00001FBA  6000 0040               1252      BRA CONTINUER_O
+00001FBE                          1253  VERIFIER_DIAGONALE_2_O:
+00001FBE  207C 00002BDE           1254      MOVE.L #TABLE,A0
+00001FC4  5088                    1255      ADD.L #8,A0
+00001FC6  B810                    1256      CMP.B (A0),D4
+00001FC8  6700 0006               1257      BEQ CASE_SUIV_DIA2_1_O
+00001FCC  6000 002E               1258      BRA CONTINUER_O
+00001FD0                          1259  CASE_SUIV_DIA2_1_O:
+00001FD0  207C 00002BDE           1260      MOVE.L #TABLE,A0
+00001FD6  D1FC 0000000C           1261      ADD.L #12,A0
+00001FDC  B810                    1262      CMP.B (A0),D4
+00001FDE  6700 0006               1263      BEQ CASE_SUIV_DIA2_2_O
+00001FE2  6000 0018               1264      BRA CONTINUER_O
+00001FE6                          1265  CASE_SUIV_DIA2_2_O:
+00001FE6  207C 00002BDE           1266      MOVE.L #TABLE,A0
+00001FEC  D1FC 00000010           1267      ADD.L #16,A0
+00001FF2  B810                    1268      CMP.B (A0),D4
+00001FF4  6700 0054               1269      BEQ RESULTAT
+00001FF8  6000 0002               1270      BRA CONTINUER_O
+00001FFC                          1271  CONTINUER_O:
+00001FFC                          1272  *    ON VERIFIE SI LA TABLE EST PLEINE
+00001FFC  207C 00002BDE           1273      MOVE.L #TABLE,A0
+00002002  2608                    1274      MOVE.L A0,D3
+00002004  0683 00000000           1275      ADD.L #0,D3
+0000200A  207C 00002BDE           1276      MOVE.L #TABLE,A0
+00002010  2808                    1277      MOVE.L A0,D4
+00002012  0644 0019               1278      ADD.W #25,D4
+00002016                          1279  VERIFIER_REMPLIE_O:
+00002016  B644                    1280      CMP.W D4,D3
+00002018  6700 0006               1281      BEQ METTRE_PLEIN_O
+0000201C  6000 000E               1282      BRA PAS_METTRE_PLEIN_O
+00002020                          1283  METTRE_PLEIN_O:
+00002020  13FC 0001 00002BFC      1284      MOVE.B #1,PLEIN
+00002028  6000 0020               1285      BRA RESULTAT
+0000202C                          1286  PAS_METTRE_PLEIN_O:
+0000202C  2043                    1287      MOVE.L D3,A0
+0000202E  0C10 0058               1288      CMP.B #'X',(A0)
+00002032  6600 0006               1289      BNE VERIFIER_O_O
+00002036  5243                    1290      ADD.W #$1,D3
+00002038  60DC                    1291      BRA VERIFIER_REMPLIE_O
+0000203A                          1292  VERIFIER_O_O:
+0000203A  0C10 004F               1293      CMP.B #'O',(A0)
+0000203E  6600 0006               1294      BNE FIN_VERIFIER_O_O
+00002042  5243                    1295      ADD.W #$1,D3
+00002044  60D0                    1296      BRA VERIFIER_REMPLIE_O
+00002046                          1297  FIN_VERIFIER_O_O:
+00002046  6000 F856               1298      BRA CONTINUER_JEU2
+0000204A                          1299      
+0000204A                          1300      
+0000204A                          1301      
+0000204A                          1302      RESULTAT:
+0000204A  0C39 0001 00002BFC      1303      CMP.B #1,PLEIN
+00002052  6700 0006               1304      BEQ PLEIN_MATCH_NUL
+00002056  6000 0072               1305      BRA GAGNE_J1_J2
+0000205A                          1306  PLEIN_MATCH_NUL:
+0000205A                          1307  FAIRE_PASSE_LE_TEMP:
+0000205A  B6BC 0007F800           1308      CMP.L #522240,D3
+00002060  6700 0006               1309      BEQ FIN_FAIRE_PASSE_LE_TEMP
+00002064  5283                    1310      ADD.L #1,D3
+00002066  60F2                    1311      BRA FAIRE_PASSE_LE_TEMP
+00002068                          1312  FIN_FAIRE_PASSE_LE_TEMP:
+00002068                          1313  *    ON AFFICHE LE RESUTAT
+00002068  4EB9 0000231E           1314      JSR MATCH_NUL
+0000206E  207C 00002BDE           1315      MOVE.L #TABLE,A0
+00002074  2608                    1316      MOVE.L A0,D3
+00002076  0683 00000000           1317      ADD.L #0,D3
+0000207C  207C 00002BDE           1318      MOVE.L #TABLE,A0
+00002082  2808                    1319      MOVE.L A0,D4
+00002084  0604 0019               1320      ADD.B #25,D4
+00002088                          1321  *    ON VIDE LA TABLE
+00002088                          1322  VIDER:
+00002088  B604                    1323      CMP.B D4,D3
+0000208A  6700 000C               1324      BEQ FIN_VIDER
+0000208E  2043                    1325      MOVE.L D3,A0
+00002090  10BC 0000               1326      MOVE.B #0,(A0)
+00002094  5203                    1327      ADD.B #1,D3
+00002096  60F0                    1328      BRA VIDER
+00002098                          1329  FIN_VIDER: 
+00002098                          1330  *    ON CHOISI DE REPRENDRE AVEC LE MEME MODE OU DE RETOURNER AU MENU
+00002098                          1331  REPRENDRE_OU_QUITTER0:
+00002098  323C 0000               1332      MOVE.W #$0000,D1
+0000209C  4EB9 000021F4           1333      JSR POS_CURS
+000020A2  4EB9 000021FC           1334      JSR SAISCAR
+000020A8  B23C 001B               1335      CMP.B #$1B,D1
+000020AC  6700 EF52               1336      BEQ MENU
+000020B0  B23C 0072               1337      CMP.B #$72,D1
+000020B4  6700 0004               1338      BEQ VERIFIERCHOIX0
+000020B8  60DE                    1339      BRA REPRENDRE_OU_QUITTER0
+000020BA                          1340  VERIFIERCHOIX0:
+000020BA  0C39 0002 00002BFD      1341      CMP.B #2,CHOIXNJ
+000020C2  6700 EF8C               1342      BEQ REPRENDRE_LE_JEU
+000020C6  6000 F78E               1343      BRA REPRENDRE_LE_JEU2
+000020CA                          1344  GAGNE_J1_J2:
+000020CA  0C79 0000 00002BFE      1345      CMP #0,J1_J2
+000020D2  6700 0006               1346      BEQ GAGNE_J2
+000020D6  6000 0084               1347      BRA GAGNE_J1
+000020DA                          1348  GAGNE_J2:
+000020DA                          1349  FAIRE_PASSE_LE_TEMP11:
+000020DA  B6BC 0007F800           1350      CMP.L #522240,D3
+000020E0  6700 0006               1351      BEQ FIN_FAIRE_PASSE_LE_TEMP11
+000020E4  5283                    1352      ADD.L #1,D3
+000020E6  60F2                    1353      BRA FAIRE_PASSE_LE_TEMP11
+000020E8                          1354  FIN_FAIRE_PASSE_LE_TEMP11:
+000020E8                          1355  *    ON AFFICHE LE RESUTAT
+000020E8  4EB9 00002438           1356      JSR O_GAGNE
+000020EE  5239 00002C8F           1357      ADD.B #1,S_O
+000020F4  207C 00002C18           1358      MOVE.L #SCORE_O,A0
+000020FA  10B9 00002C8F           1359      MOVE.B S_O,(A0)
+00002100  207C 00002BDE           1360      MOVE.L #TABLE,A0
+00002106  2608                    1361      MOVE.L A0,D3
+00002108  0683 00000000           1362      ADD.L #0,D3
+0000210E  207C 00002BDE           1363      MOVE.L #TABLE,A0
+00002114  2808                    1364      MOVE.L A0,D4
+00002116  0604 0019               1365      ADD.B #25,D4
+0000211A                          1366  *    ON VIDE LA TABLE
+0000211A                          1367  VIDER1:
+0000211A  B604                    1368      CMP.B D4,D3
+0000211C  6700 000C               1369      BEQ FIN_VIDER1
+00002120  2043                    1370      MOVE.L D3,A0
+00002122  10BC 0000               1371      MOVE.B #0,(A0)
+00002126  5203                    1372      ADD.B #1,D3
+00002128  60F0                    1373      BRA VIDER1
+0000212A                          1374  FIN_VIDER1: 
+0000212A                          1375  *    ON CHOISI DE REPRENDRE AVEC LE MEME MODE OU DE RETOURNER AU MENU
+0000212A                          1376  REPRENDRE_OU_QUITTER1:
+0000212A  323C 0000               1377      MOVE.W #$0000,D1
+0000212E  4EB9 000021F4           1378      JSR POS_CURS
+00002134  4EB9 000021FC           1379      JSR SAISCAR
+0000213A  B23C 001B               1380      CMP.B  #$1B,D1
+0000213E  6700 EEC0               1381      BEQ MENU
+00002142  B23C 0072               1382      CMP.B  #$72,D1
+00002146  6700 0004               1383      BEQ VERIFIERCHOIX1
+0000214A  60DE                    1384      BRA REPRENDRE_OU_QUITTER1
+0000214C                          1385  VERIFIERCHOIX1:
+0000214C  0C39 0002 00002BFD      1386      CMP.B #2,CHOIXNJ
+00002154  6700 EEFA               1387      BEQ REPRENDRE_LE_JEU
+00002158  6000 F6FC               1388      BRA REPRENDRE_LE_JEU2
+0000215C                          1389  GAGNE_J1:  
+0000215C                          1390  FAIRE_PASSE_LE_TEMP22:
+0000215C  B6BC 0007F800           1391      CMP.L #522240,D3
+00002162  6700 0006               1392      BEQ FIN_FAIRE_PASSE_LE_TEMP22
+00002166  5283                    1393      ADD.L #1,D3
+00002168  60F2                    1394      BRA FAIRE_PASSE_LE_TEMP22
+0000216A                          1395  FIN_FAIRE_PASSE_LE_TEMP22:
+0000216A                          1396  *    ON AFFICHE LE RESUTAT
+0000216A  4EB9 00002508           1397      JSR X_GAGNE
+00002170  5239 00002C8E           1398      ADD.B #1,S_X
+00002176  207C 00002C16           1399      MOVE.L #SCORE_X,A0
+0000217C  10B9 00002C8E           1400      MOVE.B S_X,(A0)
+00002182  207C 00002BDE           1401      MOVE.L #TABLE,A0
+00002188  2608                    1402      MOVE.L A0,D3
+0000218A  0683 00000000           1403      ADD.L #0,D3
+00002190  207C 00002BDE           1404      MOVE.L #TABLE,A0
+00002196  2808                    1405      MOVE.L A0,D4
+00002198  0604 0019               1406      ADD.B #25,D4
+0000219C                          1407  *    ON VIDE LA TABLE
+0000219C                          1408  VIDER2:
+0000219C  B604                    1409      CMP.B D4,D3
+0000219E  6700 000C               1410      BEQ FIN_VIDER2
+000021A2  2043                    1411      MOVE.L D3,A0
+000021A4  10BC 0000               1412      MOVE.B #0,(A0)
+000021A8  5203                    1413      ADD.B #1,D3
+000021AA  60F0                    1414      BRA VIDER2
+000021AC                          1415  FIN_VIDER2:
+000021AC                          1416  *    ON CHOISI DE REPRENDRE AVEC LE MEME MODE OU DE RETOURNER AU MENU
+000021AC                          1417  REPRENDRE_OU_QUITTER2:
+000021AC  323C 0000               1418      MOVE.W #$0000,D1
+000021B0  4EB9 000021F4           1419      JSR POS_CURS
+000021B6  4EB9 000021FC           1420      JSR SAISCAR
+000021BC  B23C 001B               1421      CMP.B  #$1B,D1
+000021C0  6700 EE3E               1422      BEQ MENU
+000021C4  B23C 0072               1423      CMP.B  #$72,D1
+000021C8  6700 0004               1424      BEQ VERIFIERCHOIX2
+000021CC  60DE                    1425      BRA REPRENDRE_OU_QUITTER2
+000021CE                          1426  VERIFIERCHOIX2:
+000021CE  0C39 0002 00002BFD      1427      CMP.B #2,CHOIXNJ
+000021D6  6700 EE78               1428      BEQ REPRENDRE_LE_JEU
+000021DA  6000 F67A               1429      BRA REPRENDRE_LE_JEU2
+000021DE                          1430  FIN_JEU:
+000021DE  4EF9 00002204           1431      JMP FINPRG
+000021E4                          1432      INCLUDE 'BIBLIOV.X68'
+000021E4                          1433  AFFCAR:
+000021E4  303C 0006               1434      MOVE #6,D0
+000021E8  4E4F                    1435      TRAP #15
+000021EA  4E75                    1436      RTS
+000021EC                          1437      
+000021EC                          1438  GET_TIME:
+000021EC  303C 0008               1439      MOVE #8,D0
+000021F0  4E4F                    1440      TRAP #15
+000021F2  4E75                    1441      RTS
+000021F4                          1442      
+000021F4                          1443  POS_CURS:
+000021F4  303C 000B               1444      MOVE #11,D0
+000021F8  4E4F                    1445      TRAP #15
+000021FA  4E75                    1446      RTS
+000021FC                          1447      
+000021FC                          1448  SAISCAR:
+000021FC  303C 0005               1449      MOVE #5,D0
+00002200  4E4F                    1450      TRAP #15
+00002202  4E75                    1451      RTS
+00002204                          1452      
+00002204                          1453  FINPRG:
+00002204  303C 0009               1454      MOVE #9,D0
+00002208  4E4F                    1455      TRAP #15
+0000220A                          1456      
+0000220A                          1457  AFFCHAINE:
+0000220A  1210                    1458     MOVE.B (A0),D1
+0000220C  B23C 0000               1459     CMP.B #0,D1
+00002210  6700 000A               1460     BEQ FIN
+00002214  4EB8 21E4               1461     JSR AFFCAR
+00002218  5288                    1462     ADD.L #1,A0
+0000221A  60EE                    1463     BRA AFFCHAINE
+0000221C                          1464  FIN:
+0000221C  4E75                    1465      RTS
+0000221E                          1466      
+0000221E                          1467  SAISCHAINE:
+0000221E  2248                    1468      MOVE.L A0,A1
+00002220  4EB8 21FC               1469      JSR SAISCAR
+00002224  B23C 000D               1470      CMP.B #13,D1
+00002228  6700 0008               1471      BEQ FIN1 
+0000222C  1081                    1472      MOVE.B D1,(A0)
+0000222E  5288                    1473      ADD.L #1,A0
+00002230  60EC                    1474      BRA SAISCHAINE
+00002232                          1475  FIN1:
+00002232  10BC 0000               1476      MOVE.B #0,(A0)
+00002236  2049                    1477      MOVE.L A1,A0
+00002238  4E75                    1478      RTS
+0000223A                          1479      
+0000223A                          1480     
+0000223A                          1481     
+0000223A                          1482  
+0000223A                          1483  
+0000223A                          1484  
+0000223A                          1485  
+0000223A                          1486  
+0000223A                          1487  
+0000223A                          1488  -------------------- end include --------------------
+0000223A                          1489      INCLUDE 'BIBGRAPHV.X68' 
+0000223A                          1490  SET_PEN_COLOR:
+0000223A  303C 0050               1491      MOVE #80,D0
+0000223E  4E4F                    1492      TRAP #15
+00002240  4E75                    1493      RTS
+00002242                          1494      
+00002242                          1495  SET_FILL_COLOR:
+00002242  303C 0051               1496      MOVE #81,D0
+00002246  4E4F                    1497      TRAP #15
+00002248  4E75                    1498      RTS
+0000224A                          1499      
+0000224A                          1500  POT_DE_PEINTURE:
+0000224A  303C 0059               1501      MOVE #89,D0
+0000224E  4E4F                    1502      TRAP #15
+00002250  4E75                    1503      RTS
+00002252                          1504  
+00002252                          1505  DRAW_LINE:
+00002252  303C 0054               1506      MOVE #84,D0
+00002256  4E4F                    1507      TRAP #15
+00002258  4E75                    1508      RTS
+0000225A                          1509  
+0000225A                          1510  DRAW_RECT:
+0000225A  303C 005A               1511      MOVE #90,D0
+0000225E  4E4F                    1512      TRAP #15
+00002260  4E75                    1513      RTS
+00002262                          1514      
+00002262                          1515  DRAW_FILL_ELLIPSE:
+00002262  303C 0058               1516      MOVE #88,D0
+00002266  4E4F                    1517      TRAP #15
+00002268  4E75                    1518      RTS
+0000226A                          1519      
+0000226A                          1520  DRAW_ELLIPSE:
+0000226A  303C 005B               1521      MOVE #91,D0
+0000226E  4E4F                    1522      TRAP #15
+00002270  4E75                    1523      RTS
+00002272                          1524      
+00002272                          1525  DRAW_FILL_RECT:
+00002272  303C 0057               1526      MOVE #87,D0
+00002276  4E4F                    1527      TRAP #15
+00002278  4E75                    1528      RTS
+0000227A                          1529      
+0000227A                          1530  WIDTH_PEN:
+0000227A  303C 005D               1531      MOVE #93,D0
+0000227E  4E4F                    1532      TRAP #15
+00002280  4E75                    1533      RTS
+00002282                          1534      
+00002282                          1535  DRAW_STRING:
+00002282  303C 005F               1536      MOVE #95,D0
+00002286  4E4F                    1537      TRAP #15
+00002288  4E75                    1538      RTS
+0000228A                          1539  
+0000228A                          1540  
+0000228A                          1541  
+0000228A                          1542  
+0000228A                          1543  
+0000228A                          1544  -------------------- end include --------------------
+0000228A                          1545      INCLUDE 'BIBGRILLEV.X68'
+0000228A                          1546      
+0000228A                          1547  JOUEUR_1_2:
+0000228A  123C 0001               1548      MOVE.B #1,D1
+0000228E  4EB8 227A               1549      JSR WIDTH_PEN
+00002292                          1550      
+00002292  223C 000066CC           1551      MOVE.L #$000066CC,D1
+00002298  4EB8 2242               1552      JSR SET_FILL_COLOR
+0000229C  323C 02BC               1553      MOVE.W #700,D1 
+000022A0  343C 01F4               1554      MOVE.W #500,D2 
+000022A4  363C 0000               1555      MOVE.W #0,D3
+000022A8  383C 0000               1556      MOVE.W #0,D4
+000022AC  4EB8 2272               1557      JSR DRAW_FILL_RECT
+000022B0                          1558  
+000022B0  223C 00606060           1559      MOVE.L #$00606060,D1
+000022B6  4EB8 2242               1560      JSR SET_FILL_COLOR
+000022BA                          1561      
+000022BA  323C 01B8               1562      MOVE.W #440,D1 
+000022BE  343C 008C               1563      MOVE.W #140,D2 
+000022C2  363C 00C8               1564      MOVE.W #200,D3
+000022C6  383C 00AA               1565      MOVE.W #170,D4
+000022CA  4EB8 2272               1566      JSR DRAW_FILL_RECT
+000022CE                          1567      
+000022CE  323C 01B8               1568      MOVE.W #440,D1 
+000022D2  343C 00DC               1569      MOVE.W #220,D2 
+000022D6  363C 00C8               1570      MOVE.W #200,D3
+000022DA  383C 00FA               1571      MOVE.W #250,D4
+000022DE  4EB8 2272               1572      JSR DRAW_FILL_RECT
+000022E2                          1573      
+000022E2  323C 00D4               1574      MOVE.W #212,D1
+000022E6  343C 0096               1575      MOVE.W #150,D2
+000022EA  327C 2C1A               1576      MOVE #JOUEUR1_,A1
+000022EE  4EB8 2282               1577      JSR DRAW_STRING
+000022F2                          1578      
+000022F2  323C 00D4               1579      MOVE.W #212,D1
+000022F6  343C 00E6               1580      MOVE.W #230,D2
+000022FA  327C 2C36               1581      MOVE #JOUEUR2_,A1
+000022FE  4EB8 2282               1582      JSR DRAW_STRING
+00002302                          1583      
+00002302  223C 000066CC           1584      MOVE.L #$000066CC,D1
+00002308  4EB8 2242               1585      JSR SET_FILL_COLOR
+0000230C                          1586      
+0000230C  323C 012C               1587      MOVE.W #300,D1
+00002310  343C 0064               1588      MOVE.W #100,D2
+00002314  327C 2C89               1589      MOVE #MENU__,A1
+00002318  4EB8 2282               1590      JSR DRAW_STRING  
+0000231C  4E75                    1591      RTS
+0000231E                          1592      
+0000231E                          1593  MATCH_NUL: 
+0000231E  123C 0001               1594      MOVE.B #1,D1
+00002322  4EB8 227A               1595      JSR WIDTH_PEN
+00002326                          1596      
+00002326  223C 00EBCE87           1597      MOVE.L #$00EBCE87,D1
+0000232C  4EB8 2242               1598      JSR SET_FILL_COLOR
+00002330  323C 02BC               1599      MOVE.W #700,D1 
+00002334  343C 01F4               1600      MOVE.W #500,D2 
+00002338  363C 0000               1601      MOVE.W #0,D3
+0000233C  383C 0000               1602      MOVE.W #0,D4
+00002340  4EB8 2272               1603      JSR DRAW_FILL_RECT
+00002344                          1604      
+00002344  223C 00FFFFFF           1605      MOVE.L #$00FFFFFF,D1
+0000234A  4EB8 223A               1606      JSR SET_PEN_COLOR
+0000234E                          1607      
+0000234E  223C 00FFFFFF           1608      MOVE.L #$00FFFFFF,D1
+00002354  4EB8 2242               1609      JSR SET_FILL_COLOR
+00002358                          1610      
+00002358  323C 0131               1611      MOVE.W #305,D1 
+0000235C  343C 00EB               1612      MOVE.W #235,D2 
+00002360  363C 00E6               1613      MOVE.W #230,D3
+00002364  383C 00A0               1614      MOVE.W #160,D4
+00002368  4EB8 2262               1615      JSR DRAW_FILL_ELLIPSE
+0000236C                          1616      
+0000236C  223C 00696969           1617      MOVE.L #$00696969,D1
+00002372  4EB8 223A               1618      JSR SET_PEN_COLOR
+00002376                          1619      
+00002376  123C 0004               1620      MOVE.B #4,D1
+0000237A  4EB8 227A               1621      JSR WIDTH_PEN
+0000237E  323C 019A               1622      MOVE.W #410,D1 
+00002382  343C 00EB               1623      MOVE.W #235,D2 
+00002386  363C 014F               1624      MOVE.W #335,D3
+0000238A  383C 00A0               1625      MOVE.W #160,D4
+0000238E  4EB8 2252               1626      JSR DRAW_LINE
+00002392                          1627  
+00002392  123C 0004               1628      MOVE.B #4,D1
+00002396  4EB8 227A               1629      JSR WIDTH_PEN
+0000239A  323C 014F               1630      MOVE.W #335,D1 
+0000239E  343C 00EB               1631      MOVE.W #235,D2 
+000023A2  363C 019A               1632      MOVE.W #410,D3
+000023A6  383C 00A0               1633      MOVE.W #160,D4
+000023AA  4EB8 2252               1634      JSR DRAW_LINE
+000023AE                          1635      
+000023AE  223C 00696969           1636      MOVE.L #$00696969,D1
+000023B4  4EB8 2242               1637      JSR SET_FILL_COLOR
+000023B8                          1638      
+000023B8  323C 011D               1639      MOVE.W #285,D1
+000023BC  343C 00FF               1640      MOVE.W #255,D2
+000023C0  327C 2C04               1641      MOVE #EGALITE,A1
+000023C4  4EB8 2282               1642      JSR DRAW_STRING
+000023C8                          1643      
+000023C8                          1644      
+000023C8  223C 00006600           1645      MOVE.L #$00006600,D1
+000023CE  4EB8 2242               1646      JSR SET_FILL_COLOR
+000023D2                          1647      
+000023D2  123C 0001               1648      MOVE.B #1,D1
+000023D6  4EB8 227A               1649      JSR WIDTH_PEN
+000023DA                          1650      
+000023DA  323C 01B8               1651      MOVE.W #440,D1 
+000023DE  343C 0172               1652      MOVE.W #370,D2 
+000023E2  363C 00C8               1653      MOVE.W #200,D3
+000023E6  383C 0190               1654      MOVE.W #400,D4
+000023EA  4EB8 2272               1655      JSR DRAW_FILL_RECT
+000023EE                          1656      
+000023EE  323C 00D1               1657      MOVE.W #209,D1
+000023F2  343C 017C               1658      MOVE.W #380,D2
+000023F6  327C 2C52               1659      MOVE #REPRENDRE_,A1
+000023FA  4EB8 2282               1660      JSR DRAW_STRING
+000023FE                          1661      
+000023FE  223C 00000099           1662      MOVE.L #$00000099,D1
+00002404  4EB8 2242               1663      JSR SET_FILL_COLOR
+00002408                          1664      
+00002408  323C 01B8               1665      MOVE.W #440,D1 
+0000240C  343C 01A4               1666      MOVE.W #420,D2 
+00002410  363C 00C8               1667      MOVE.W #200,D3
+00002414  383C 01C2               1668      MOVE.W #450,D4
+00002418  4EB8 2272               1669      JSR DRAW_FILL_RECT
+0000241C                          1670    
+0000241C  323C 00DC               1671      MOVE.W #220,D1
+00002420  343C 01AE               1672      MOVE.W #430,D2
+00002424  327C 2C6F               1673      MOVE #MENU_,A1
+00002428  4EB8 2282               1674      JSR DRAW_STRING
+0000242C                          1675      
+0000242C  223C 00FFFFFF           1676      MOVE.L #$00FFFFFF,D1
+00002432  4EB8 2242               1677      JSR SET_FILL_COLOR
+00002436  4E75                    1678      RTS
+00002438                          1679      
+00002438                          1680  O_GAGNE:
+00002438  123C 0001               1681      MOVE.B #1,D1
+0000243C  4EB8 227A               1682      JSR WIDTH_PEN
+00002440                          1683      
+00002440  223C 00EBCE87           1684      MOVE.L #$00EBCE87,D1
+00002446  4EB8 2242               1685      JSR SET_FILL_COLOR
+0000244A  323C 02BC               1686      MOVE.W #700,D1 
+0000244E  343C 01F4               1687      MOVE.W #500,D2 
+00002452  363C 0000               1688      MOVE.W #0,D3
+00002456  383C 0000               1689      MOVE.W #0,D4
+0000245A  4EB8 2272               1690      JSR DRAW_FILL_RECT
+0000245E                          1691  
+0000245E  223C 00FFFFFF           1692      MOVE.L #$00FFFFFF,D1
+00002464  4EB8 223A               1693      JSR SET_PEN_COLOR
+00002468                          1694      
+00002468  223C 00FFFFFF           1695      MOVE.L #$00FFFFFF,D1
+0000246E  4EB8 2242               1696      JSR SET_FILL_COLOR
+00002472                          1697  
+00002472  323C 017C               1698      MOVE.W #380,D1 
+00002476  343C 0118               1699      MOVE.W #280,D2 
+0000247A  363C 0104               1700      MOVE.W #260,D3
+0000247E  383C 00A0               1701      MOVE.W #160,D4
+00002482  4EB8 2262               1702      JSR DRAW_FILL_ELLIPSE
+00002486                          1703      
+00002486  223C 00696969           1704      MOVE.L #$00696969,D1
+0000248C  4EB8 2242               1705      JSR SET_FILL_COLOR
+00002490                          1706      
+00002490  323C 0122               1707      MOVE.W #290,D1
+00002494  343C 0127               1708      MOVE.W #295,D2
+00002498  327C 2C0E               1709      MOVE #GAGNE,A1
+0000249C  4EB8 2282               1710      JSR DRAW_STRING
+000024A0                          1711      
+000024A0  223C 00006600           1712      MOVE.L #$00006600,D1
+000024A6  4EB8 2242               1713      JSR SET_FILL_COLOR
+000024AA                          1714      
+000024AA  323C 01B8               1715      MOVE.W #440,D1 
+000024AE  343C 0172               1716      MOVE.W #370,D2 
+000024B2  363C 00C8               1717      MOVE.W #200,D3
+000024B6  383C 0190               1718      MOVE.W #400,D4
+000024BA  4EB8 2272               1719      JSR DRAW_FILL_RECT
+000024BE                          1720      
+000024BE  323C 00D1               1721      MOVE.W #209,D1
+000024C2  343C 017C               1722      MOVE.W #380,D2
+000024C6  327C 2C52               1723      MOVE #REPRENDRE_,A1
+000024CA  4EB8 2282               1724      JSR DRAW_STRING
+000024CE                          1725      
+000024CE  223C 00000099           1726      MOVE.L #$00000099,D1
+000024D4  4EB8 2242               1727      JSR SET_FILL_COLOR
+000024D8                          1728      
+000024D8  323C 01B8               1729      MOVE.W #440,D1 
+000024DC  343C 01A4               1730      MOVE.W #420,D2 
+000024E0  363C 00C8               1731      MOVE.W #200,D3
+000024E4  383C 01C2               1732      MOVE.W #450,D4
+000024E8  4EB8 2272               1733      JSR DRAW_FILL_RECT
+000024EC                          1734    
+000024EC  323C 00DC               1735      MOVE.W #220,D1
+000024F0  343C 01AE               1736      MOVE.W #430,D2
+000024F4  327C 2C6F               1737      MOVE #MENU_,A1
+000024F8  4EB8 2282               1738      JSR DRAW_STRING
+000024FC                          1739      
+000024FC  223C 00FFFFFF           1740      MOVE.L #$00FFFFFF,D1
+00002502  4EB8 2242               1741      JSR SET_FILL_COLOR
+00002506  4E75                    1742      RTS
+00002508                          1743      
+00002508                          1744  X_GAGNE:
+00002508  123C 0001               1745      MOVE.B #1,D1
+0000250C  4EB8 227A               1746      JSR WIDTH_PEN
+00002510                          1747      
+00002510  223C 00EBCE87           1748      MOVE.L #$00EBCE87,D1
+00002516  4EB8 2242               1749      JSR SET_FILL_COLOR
+0000251A  323C 02BC               1750      MOVE.W #700,D1 
+0000251E  343C 01F4               1751      MOVE.W #500,D2 
+00002522  363C 0000               1752      MOVE.W #0,D3
+00002526  383C 0000               1753      MOVE.W #0,D4
+0000252A  4EB8 2272               1754      JSR DRAW_FILL_RECT
+0000252E                          1755  
+0000252E  223C 00696969           1756      MOVE.L #$00696969,D1
+00002534  4EB8 223A               1757      JSR SET_PEN_COLOR
+00002538                          1758  
+00002538  123C 000A               1759      MOVE.B #10,D1
+0000253C  4EB8 227A               1760      JSR WIDTH_PEN
+00002540                          1761      
+00002540  323C 0168               1762      MOVE.W #360,D1 
+00002544  343C 0104               1763      MOVE.W #260,D2 
+00002548  363C 0118               1764      MOVE.W #280,D3
+0000254C  383C 00B4               1765      MOVE.W #180,D4
+00002550  4EB8 2252               1766      JSR DRAW_LINE
+00002554                          1767      
+00002554  323C 0118               1768      MOVE.W #280,D1 
+00002558  343C 0104               1769      MOVE.W #260,D2 
+0000255C  363C 0168               1770      MOVE.W #360,D3
+00002560  383C 00B4               1771      MOVE.W #180,D4
+00002564  4EB8 2252               1772      JSR DRAW_LINE
+00002568                          1773      
+00002568  223C 00696969           1774      MOVE.L #$00696969,D1
+0000256E  4EB8 2242               1775      JSR SET_FILL_COLOR
+00002572                          1776      
+00002572  323C 0122               1777      MOVE.W #290,D1
+00002576  343C 0127               1778      MOVE.W #295,D2
+0000257A  327C 2C0E               1779      MOVE #GAGNE,A1
+0000257E  4EB8 2282               1780      JSR DRAW_STRING
+00002582                          1781      
+00002582                          1782      
+00002582  223C 00006600           1783      MOVE.L #$00006600,D1
+00002588  4EB8 2242               1784      JSR SET_FILL_COLOR
+0000258C                          1785      
+0000258C  123C 0001               1786      MOVE.B #1,D1
+00002590  4EB8 227A               1787      JSR WIDTH_PEN
+00002594                          1788      
+00002594  323C 01B8               1789      MOVE.W #440,D1 
+00002598  343C 0172               1790      MOVE.W #370,D2 
+0000259C  363C 00C8               1791      MOVE.W #200,D3
+000025A0  383C 0190               1792      MOVE.W #400,D4
+000025A4  4EB8 2272               1793      JSR DRAW_FILL_RECT
+000025A8                          1794      
+000025A8  323C 00D1               1795      MOVE.W #209,D1
+000025AC  343C 017C               1796      MOVE.W #380,D2
+000025B0  327C 2C52               1797      MOVE #REPRENDRE_,A1
+000025B4  4EB8 2282               1798      JSR DRAW_STRING
+000025B8                          1799      
+000025B8  223C 00000099           1800      MOVE.L #$00000099,D1
+000025BE  4EB8 2242               1801      JSR SET_FILL_COLOR
+000025C2                          1802      
+000025C2  323C 01B8               1803      MOVE.W #440,D1 
+000025C6  343C 01A4               1804      MOVE.W #420,D2 
+000025CA  363C 00C8               1805      MOVE.W #200,D3
+000025CE  383C 01C2               1806      MOVE.W #450,D4
+000025D2  4EB8 2272               1807      JSR DRAW_FILL_RECT
+000025D6                          1808    
+000025D6  323C 00DC               1809      MOVE.W #220,D1
+000025DA  343C 01AE               1810      MOVE.W #430,D2
+000025DE  327C 2C6F               1811      MOVE #MENU_,A1
+000025E2  4EB8 2282               1812      JSR DRAW_STRING
+000025E6                          1813      
+000025E6  223C 00FFFFFF           1814      MOVE.L #$00FFFFFF,D1
+000025EC  4EB8 2242               1815      JSR SET_FILL_COLOR
+000025F0  4E75                    1816      RTS
+000025F2                          1817      
+000025F2                          1818  DESSINER_GRILLE:
+000025F2  123C 0001               1819      MOVE.B #1,D1
+000025F6  4EB8 227A               1820      JSR WIDTH_PEN
+000025FA                          1821      
+000025FA  223C 00EBCE87           1822      MOVE.L #$00EBCE87,D1
+00002600  4EB8 2242               1823      JSR SET_FILL_COLOR
+00002604  323C 02BC               1824      MOVE.W #700,D1 
+00002608  343C 01F4               1825      MOVE.W #500,D2 
+0000260C  363C 0000               1826      MOVE.W #0,D3
+00002610  383C 0000               1827      MOVE.W #0,D4
+00002614  4EB8 2272               1828      JSR DRAW_FILL_RECT
+00002618                          1829      
+00002618  223C 00EBCE87           1830      MOVE.L #$00EBCE87,D1
+0000261E  4EB8 223A               1831      JSR SET_PEN_COLOR
+00002622  323C 01A9               1832      MOVE.W #425,D1 
+00002626  343C 008C               1833      MOVE.W #140,D2 
+0000262A  363C 00D7               1834      MOVE.W #215,D3
+0000262E  383C 014A               1835      MOVE.W #330,D4
+00002632  4EB8 225A               1836      JSR DRAW_RECT
+00002636                          1837      
+00002636  223C 00666600           1838      MOVE.L #$00666600,D1
+0000263C  4EB8 223A               1839      JSR SET_PEN_COLOR
+00002640                          1840      
+00002640  123C 0003               1841      MOVE.B #3,D1
+00002644  4EB8 227A               1842      JSR WIDTH_PEN
+00002648                          1843      
+00002648  323C 011D               1844      MOVE.W #285,D1 
+0000264C  343C 008C               1845      MOVE.W #140,D2 
+00002650  363C 011D               1846      MOVE.W #285,D3
+00002654  383C 014A               1847      MOVE.W #330,D4
+00002658  4EB8 2252               1848      JSR DRAW_LINE
+0000265C                          1849      
+0000265C  323C 0163               1850      MOVE.W #355,D1 
+00002660  343C 008C               1851      MOVE.W #140,D2 
+00002664  363C 0163               1852      MOVE.W #355,D3
+00002668  383C 014A               1853      MOVE.W #330,D4
+0000266C  4EB8 2252               1854      JSR DRAW_LINE
+00002670                          1855      
+00002670  323C 01A9               1856      MOVE.W #425,D1 
+00002674  343C 00CB               1857      MOVE.W #203,D2 
+00002678  363C 00D7               1858      MOVE.W #215,D3
+0000267C  383C 00CB               1859      MOVE.W #203,D4
+00002680  4EB8 2252               1860      JSR DRAW_LINE
+00002684                          1861      
+00002684  323C 01A9               1862      MOVE.W #425,D1 
+00002688  343C 010A               1863      MOVE.W #266,D2 
+0000268C  363C 00D7               1864      MOVE.W #215,D3
+00002690  383C 010A               1865      MOVE.W #266,D4
+00002694  4EB8 2252               1866      JSR DRAW_LINE
+00002698                          1867      
+00002698  123C 0001               1868      MOVE.B #1,D1
+0000269C  4EB8 227A               1869      JSR WIDTH_PEN
+000026A0                          1870      
+000026A0  223C 00E0E0E0           1871      MOVE.L #$00E0E0E0,D1
+000026A6  4EB8 2242               1872      JSR SET_FILL_COLOR
+000026AA                          1873      
+000026AA  323C 010C               1874      MOVE.W #268,D1 
+000026AE  343C 0032               1875      MOVE.W #50,D2 
+000026B2  363C 0076               1876      MOVE.W #118,D3
+000026B6  383C 005A               1877      MOVE.W #90,D4
+000026BA  4EB8 2272               1878      JSR DRAW_FILL_RECT
+000026BE                          1879      
+000026BE  323C 020A               1880      MOVE.W #522,D1 
+000026C2  343C 0032               1881      MOVE.W #50,D2 
+000026C6  363C 0174               1882      MOVE.W #372,D3
+000026CA  383C 005A               1883      MOVE.W #90,D4
+000026CE  4EB8 2272               1884      JSR DRAW_FILL_RECT
+000026D2                          1885      
+000026D2  223C 00696969           1886      MOVE.L #$00696969,D1
+000026D8  4EB8 223A               1887      JSR SET_PEN_COLOR
+000026DC                          1888      
+000026DC  123C 0003               1889      MOVE.B #3,D1
+000026E0  4EB8 227A               1890      JSR WIDTH_PEN
+000026E4                          1891      
+000026E4  323C 0094               1892      MOVE.W #148,D1 
+000026E8  343C 003C               1893      MOVE.W #60,D2 
+000026EC  363C 0080               1894      MOVE.W #128,D3
+000026F0  383C 0050               1895      MOVE.W #80,D4
+000026F4  4EB8 2252               1896      JSR DRAW_LINE
+000026F8                          1897      
+000026F8  323C 0080               1898      MOVE.W #128,D1 
+000026FC  343C 003C               1899      MOVE.W #60,D2 
+00002700  363C 0094               1900      MOVE.W #148,D3
+00002704  383C 0050               1901      MOVE.W #80,D4
+00002708  4EB8 2252               1902      JSR DRAW_LINE
+0000270C                          1903      
+0000270C  223C 00FFFFFF           1904      MOVE.L #$00FFFFFF,D1
+00002712  4EB8 223A               1905      JSR SET_PEN_COLOR
+00002716                          1906      
+00002716  223C 00FFFFFF           1907      MOVE.L #$00FFFFFF,D1
+0000271C  4EB8 2242               1908      JSR SET_FILL_COLOR
+00002720                          1909      
+00002720  323C 0197               1910      MOVE.W #407,D1 
+00002724  343C 003A               1911      MOVE.W #58,D2 
+00002728  363C 017E               1912      MOVE.W #382,D3
+0000272C  383C 0052               1913      MOVE.W #82,D4
+00002730  4EB8 2262               1914      JSR DRAW_FILL_ELLIPSE
+00002734                          1915      
+00002734  223C 00E0E0E0           1916      MOVE.L #$00E0E0E0,D1
+0000273A  4EB8 2242               1917      JSR SET_FILL_COLOR
+0000273E                          1918      
+0000273E  323C 00E9               1919      MOVE.W #233,D1
+00002742  343C 003C               1920      MOVE.W #60,D2
+00002746  327C 2C16               1921      MOVE #SCORE_X,A1
+0000274A  4EB8 2282               1922      JSR DRAW_STRING
+0000274E                          1923      
+0000274E  323C 01EC               1924      MOVE.W #492,D1
+00002752  343C 003C               1925      MOVE.W #60,D2
+00002756  327C 2C18               1926      MOVE #SCORE_O,A1
+0000275A  4EB8 2282               1927      JSR DRAW_STRING
+0000275E  4E75                    1928      RTS
+00002760                          1929  
+00002760                          1930  TOUR_X:
+00002760  223C 0000FF00           1931      MOVE.L #$0000FF00,D1
+00002766  4EB8 223A               1932      JSR SET_PEN_COLOR
+0000276A                          1933      
+0000276A  123C 0004               1934      MOVE.B #4,D1
+0000276E  4EB8 227A               1935      JSR WIDTH_PEN
+00002772                          1936      
+00002772  323C 010D               1937      MOVE.W #269,D1 
+00002776  343C 005C               1938      MOVE.W #92,D2 
+0000277A  363C 0076               1939      MOVE.W #118,D3
+0000277E  383C 005C               1940      MOVE.W #92,D4
+00002782  4EB8 2272               1941      JSR DRAW_FILL_RECT
+00002786                          1942      
+00002786  223C 00EBCE87           1943      MOVE.L #$00EBCE87,D1
+0000278C  4EB8 223A               1944      JSR SET_PEN_COLOR
+00002790                          1945      
+00002790  123C 0004               1946      MOVE.B #4,D1
+00002794  4EB8 227A               1947      JSR WIDTH_PEN
+00002798                          1948      
+00002798  323C 020B               1949      MOVE.W #523,D1 
+0000279C  343C 005C               1950      MOVE.W #92,D2 
+000027A0  363C 0174               1951      MOVE.W #372,D3
+000027A4  383C 005C               1952      MOVE.W #92,D4
+000027A8  4EB8 2272               1953      JSR DRAW_FILL_RECT
+000027AC                          1954      
+000027AC  223C 00666600           1955      MOVE.L #$00666600,D1
+000027B2  4EB8 223A               1956      JSR SET_PEN_COLOR
+000027B6                          1957      
+000027B6  123C 0001               1958      MOVE.B #1,D1
+000027BA  4EB8 227A               1959      JSR WIDTH_PEN
+000027BE                          1960      
+000027BE  323C 020A               1961      MOVE.W #522,D1 
+000027C2  343C 005A               1962      MOVE.W #90,D2 
+000027C6  363C 0174               1963      MOVE.W #372,D3
+000027CA  383C 005A               1964      MOVE.W #90,D4
+000027CE  4EB8 2272               1965      JSR DRAW_FILL_RECT
+000027D2  4E75                    1966      RTS
+000027D4                          1967      
+000027D4                          1968  TOUR_O:
+000027D4  223C 0000FF00           1969      MOVE.L #$0000FF00,D1
+000027DA  4EB8 223A               1970      JSR SET_PEN_COLOR
+000027DE                          1971      
+000027DE  123C 0004               1972      MOVE.B #4,D1
+000027E2  4EB8 227A               1973      JSR WIDTH_PEN
+000027E6                          1974      
+000027E6  323C 020B               1975      MOVE.W #523,D1 
+000027EA  343C 005C               1976      MOVE.W #92,D2 
+000027EE  363C 0174               1977      MOVE.W #372,D3
+000027F2  383C 005C               1978      MOVE.W #92,D4
+000027F6  4EB8 2272               1979      JSR DRAW_FILL_RECT
+000027FA                          1980      
+000027FA  223C 00EBCE87           1981      MOVE.L #$00EBCE87,D1
+00002800  4EB8 223A               1982      JSR SET_PEN_COLOR
+00002804                          1983      
+00002804  123C 0004               1984      MOVE.B #4,D1
+00002808  4EB8 227A               1985      JSR WIDTH_PEN
+0000280C                          1986      
+0000280C  323C 010D               1987      MOVE.W #269,D1 
+00002810  343C 005C               1988      MOVE.W #92,D2 
+00002814  363C 0076               1989      MOVE.W #118,D3
+00002818  383C 005C               1990      MOVE.W #92,D4
+0000281C  4EB8 2272               1991      JSR DRAW_FILL_RECT
+00002820                          1992  
+00002820                          1993      
+00002820  223C 00666600           1994      MOVE.L #$00666600,D1
+00002826  4EB8 223A               1995      JSR SET_PEN_COLOR
+0000282A                          1996      
+0000282A  123C 0001               1997      MOVE.B #1,D1
+0000282E  4EB8 227A               1998      JSR WIDTH_PEN
+00002832                          1999      
+00002832  323C 010C               2000      MOVE.W #268,D1 
+00002836  343C 005A               2001      MOVE.W #90,D2 
+0000283A  363C 0076               2002      MOVE.W #118,D3
+0000283E  383C 005A               2003      MOVE.W #90,D4
+00002842  4EB8 2272               2004      JSR DRAW_FILL_RECT
+00002846  4E75                    2005      RTS
+00002848                          2006      
+00002848                          2007  X_case_0_0:
+00002848  223C 00696969           2008      MOVE.L #$00696969,D1
+0000284E  4EB8 223A               2009      JSR SET_PEN_COLOR
+00002852                          2010      
+00002852  123C 0003               2011      MOVE.B #3,D1
+00002856  4EB8 227A               2012      JSR WIDTH_PEN
+0000285A                          2013      
+0000285A  323C 010B               2014      MOVE.W #267,D1 
+0000285E  343C 00BC               2015      MOVE.W #188,D2 
+00002862  363C 00E9               2016      MOVE.W #233,D3
+00002866  383C 009B               2017      MOVE.W #155,D4
+0000286A  4EB8 2252               2018      JSR DRAW_LINE
+0000286E                          2019  
+0000286E  323C 00E9               2020      MOVE.W #233,D1 
+00002872  343C 00BC               2021      MOVE.W #188,D2 
+00002876  363C 010B               2022      MOVE.W #267,D3
+0000287A  383C 009B               2023      MOVE.W #155,D4
+0000287E  4EB8 2252               2024      JSR DRAW_LINE
+00002882  4E75                    2025      RTS
+00002884                          2026      
+00002884                          2027  O_case_0_0:
+00002884  223C 00FFFFFF           2028      MOVE.L #$00FFFFFF,D1
+0000288A  4EB8 223A               2029      JSR SET_PEN_COLOR
+0000288E                          2030      
+0000288E  223C 00FFFFFF           2031      MOVE.L #$00FFFFFF,D1
+00002894  4EB8 2242               2032      JSR SET_FILL_COLOR
+00002898                          2033  
+00002898  323C 010B               2034      MOVE.W #267,D1 
+0000289C  343C 00BC               2035      MOVE.W #188,D2 
+000028A0  363C 00E9               2036      MOVE.W #233,D3
+000028A4  383C 009B               2037      MOVE.W #155,D4
+000028A8  4EB8 2262               2038      JSR DRAW_FILL_ELLIPSE
+000028AC  4E75                    2039      RTS
+000028AE                          2040      
+000028AE                          2041  X_case_0_1:
+000028AE  223C 00696969           2042      MOVE.L #$00696969,D1
+000028B4  4EB8 223A               2043      JSR SET_PEN_COLOR
+000028B8                          2044      
+000028B8  123C 0003               2045      MOVE.B #3,D1
+000028BC  4EB8 227A               2046      JSR WIDTH_PEN
+000028C0                          2047      
+000028C0  323C 0151               2048      MOVE.W #337,D1 
+000028C4  343C 00BC               2049      MOVE.W #188,D2 
+000028C8  363C 012F               2050      MOVE.W #303,D3
+000028CC  383C 009B               2051      MOVE.W #155,D4
+000028D0  4EB8 2252               2052      JSR DRAW_LINE
+000028D4                          2053     
+000028D4  323C 012F               2054      MOVE.W #303,D1 
+000028D8  343C 00BC               2055      MOVE.W #188,D2 
+000028DC  363C 0151               2056      MOVE.W #337,D3
+000028E0  383C 009B               2057      MOVE.W #155,D4
+000028E4  4EB8 2252               2058      JSR DRAW_LINE
+000028E8  4E75                    2059      RTS
+000028EA                          2060      
+000028EA                          2061  O_case_0_1:
+000028EA  223C 00FFFFFF           2062      MOVE.L #$00FFFFFF,D1
+000028F0  4EB8 223A               2063      JSR SET_PEN_COLOR
+000028F4                          2064      
+000028F4  223C 00FFFFFF           2065      MOVE.L #$00FFFFFF,D1
+000028FA  4EB8 2242               2066      JSR SET_FILL_COLOR
+000028FE                          2067      
+000028FE  323C 0151               2068      MOVE.W #337,D1 
+00002902  343C 00BC               2069      MOVE.W #188,D2 
+00002906  363C 012F               2070      MOVE.W #303,D3
+0000290A  383C 009B               2071      MOVE.W #155,D4
+0000290E  4EB8 2262               2072      JSR DRAW_FILL_ELLIPSE
+00002912  4E75                    2073      RTS
+00002914                          2074      
+00002914                          2075  X_case_0_2:
+00002914  223C 00696969           2076      MOVE.L #$00696969,D1
+0000291A  4EB8 223A               2077      JSR SET_PEN_COLOR
+0000291E                          2078      
+0000291E  123C 0003               2079      MOVE.B #3,D1
+00002922  4EB8 227A               2080      JSR WIDTH_PEN
+00002926                          2081      
+00002926  323C 0197               2082      MOVE.W #407,D1 
+0000292A  343C 00BC               2083      MOVE.W #188,D2 
+0000292E  363C 0175               2084      MOVE.W #373,D3
+00002932  383C 009B               2085      MOVE.W #155,D4
+00002936  4EB8 2252               2086      JSR DRAW_LINE
+0000293A                          2087      
+0000293A  323C 0175               2088      MOVE.W #373,D1 
+0000293E  343C 00BC               2089      MOVE.W #188,D2 
+00002942  363C 0197               2090      MOVE.W #407,D3
+00002946  383C 009B               2091      MOVE.W #155,D4
+0000294A  4EB8 2252               2092      JSR DRAW_LINE
+0000294E  4E75                    2093      RTS
+00002950                          2094      
+00002950                          2095  O_case_0_2:
+00002950  223C 00FFFFFF           2096      MOVE.L #$00FFFFFF,D1
+00002956  4EB8 223A               2097      JSR SET_PEN_COLOR
+0000295A                          2098      
+0000295A  223C 00FFFFFF           2099      MOVE.L #$00FFFFFF,D1
+00002960  4EB8 2242               2100      JSR SET_FILL_COLOR
+00002964                          2101   
+00002964  323C 0197               2102      MOVE.W #407,D1 
+00002968  343C 00BC               2103      MOVE.W #188,D2 
+0000296C  363C 0175               2104      MOVE.W #373,D3
+00002970  383C 009B               2105      MOVE.W #155,D4
+00002974  4EB8 2262               2106      JSR DRAW_FILL_ELLIPSE
+00002978  4E75                    2107      RTS
+0000297A                          2108      
+0000297A                          2109  X_case_1_0:
+0000297A  223C 00696969           2110      MOVE.L #$00696969,D1
+00002980  4EB8 223A               2111      JSR SET_PEN_COLOR
+00002984                          2112      
+00002984  123C 0003               2113      MOVE.B #3,D1
+00002988  4EB8 227A               2114      JSR WIDTH_PEN
+0000298C                          2115      
+0000298C  323C 010B               2116      MOVE.W #267,D1 
+00002990  343C 00DA               2117      MOVE.W #218,D2 
+00002994  363C 00E9               2118      MOVE.W #233,D3
+00002998  383C 00FB               2119      MOVE.W #251,D4
+0000299C  4EB8 2252               2120      JSR DRAW_LINE
+000029A0                          2121  
+000029A0  323C 00E9               2122      MOVE.W #233,D1 
+000029A4  343C 00DA               2123      MOVE.W #218,D2 
+000029A8  363C 010B               2124      MOVE.W #267,D3
+000029AC  383C 00FB               2125      MOVE.W #251,D4
+000029B0  4EB8 2252               2126      JSR DRAW_LINE   
+000029B4  4E75                    2127      RTS
+000029B6                          2128      
+000029B6                          2129  O_case_1_0:
+000029B6  223C 00FFFFFF           2130      MOVE.L #$00FFFFFF,D1
+000029BC  4EB8 223A               2131      JSR SET_PEN_COLOR
+000029C0                          2132      
+000029C0  223C 00FFFFFF           2133      MOVE.L #$00FFFFFF,D1
+000029C6  4EB8 2242               2134      JSR SET_FILL_COLOR
+000029CA                          2135   
+000029CA  323C 010B               2136      MOVE.W #267,D1 
+000029CE  343C 00DA               2137      MOVE.W #218,D2 
+000029D2  363C 00E9               2138      MOVE.W #233,D3
+000029D6  383C 00FB               2139      MOVE.W #251,D4
+000029DA  4EB8 2262               2140      JSR DRAW_FILL_ELLIPSE
+000029DE  4E75                    2141      RTS
+000029E0                          2142      
+000029E0                          2143  X_case_1_1:
+000029E0  223C 00696969           2144      MOVE.L #$00696969,D1
+000029E6  4EB8 223A               2145      JSR SET_PEN_COLOR
+000029EA                          2146      
+000029EA  123C 0003               2147      MOVE.B #3,D1
+000029EE  4EB8 227A               2148      JSR WIDTH_PEN
+000029F2                          2149      
+000029F2  323C 0151               2150      MOVE.W #337,D1 
+000029F6  343C 00DA               2151      MOVE.W #218,D2 
+000029FA  363C 012F               2152      MOVE.W #303,D3
+000029FE  383C 00FB               2153      MOVE.W #251,D4
+00002A02  4EB8 2252               2154      JSR DRAW_LINE
+00002A06                          2155      
+00002A06  323C 012F               2156      MOVE.W #303,D1 
+00002A0A  343C 00DA               2157      MOVE.W #218,D2 
+00002A0E  363C 0151               2158      MOVE.W #337,D3
+00002A12  383C 00FB               2159      MOVE.W #251,D4
+00002A16  4EB8 2252               2160      JSR DRAW_LINE
+00002A1A  4E75                    2161      RTS  
+00002A1C                          2162      
+00002A1C                          2163  O_case_1_1:
+00002A1C  223C 00FFFFFF           2164      MOVE.L #$00FFFFFF,D1
+00002A22  4EB8 223A               2165      JSR SET_PEN_COLOR
+00002A26                          2166      
+00002A26  223C 00FFFFFF           2167      MOVE.L #$00FFFFFF,D1
+00002A2C  4EB8 2242               2168      JSR SET_FILL_COLOR
+00002A30                          2169      
+00002A30  323C 0151               2170      MOVE.W #337,D1 
+00002A34  343C 00DA               2171      MOVE.W #218,D2 
+00002A38  363C 012F               2172      MOVE.W #303,D3
+00002A3C  383C 00FB               2173      MOVE.W #251,D4
+00002A40  4EB8 2262               2174      JSR DRAW_FILL_ELLIPSE
+00002A44  4E75                    2175      RTS
+00002A46                          2176      
+00002A46                          2177  X_case_1_2:
+00002A46  223C 00696969           2178      MOVE.L #$00696969,D1
+00002A4C  4EB8 223A               2179      JSR SET_PEN_COLOR
+00002A50                          2180      
+00002A50  123C 0003               2181      MOVE.B #3,D1
+00002A54  4EB8 227A               2182      JSR WIDTH_PEN
+00002A58                          2183      
+00002A58  323C 0197               2184      MOVE.W #407,D1 
+00002A5C  343C 00DA               2185      MOVE.W #218,D2 
+00002A60  363C 0175               2186      MOVE.W #373,D3
+00002A64  383C 00FB               2187      MOVE.W #251,D4
+00002A68  4EB8 2252               2188      JSR DRAW_LINE
+00002A6C                          2189      
+00002A6C  323C 0175               2190      MOVE.W #373,D1 
+00002A70  343C 00DA               2191      MOVE.W #218,D2 
+00002A74  363C 0197               2192      MOVE.W #407,D3
+00002A78  383C 00FB               2193      MOVE.W #251,D4
+00002A7C  4EB8 2252               2194      JSR DRAW_LINE
+00002A80  4E75                    2195      RTS
+00002A82                          2196      
+00002A82                          2197  O_case_1_2:
+00002A82  223C 00FFFFFF           2198      MOVE.L #$00FFFFFF,D1
+00002A88  4EB8 223A               2199      JSR SET_PEN_COLOR
+00002A8C                          2200      
+00002A8C  223C 00FFFFFF           2201      MOVE.L #$00FFFFFF,D1
+00002A92  4EB8 2242               2202      JSR SET_FILL_COLOR
+00002A96                          2203      
+00002A96  323C 0197               2204      MOVE.W #407,D1 
+00002A9A  343C 00DA               2205      MOVE.W #218,D2 
+00002A9E  363C 0175               2206      MOVE.W #373,D3
+00002AA2  383C 00FB               2207      MOVE.W #251,D4
+00002AA6  4EB8 2262               2208      JSR DRAW_FILL_ELLIPSE
+00002AAA  4E75                    2209      RTS
+00002AAC                          2210  X_case_2_0:
+00002AAC  223C 00696969           2211      MOVE.L #$00696969,D1
+00002AB2  4EB8 223A               2212      JSR SET_PEN_COLOR
+00002AB6                          2213      
+00002AB6  123C 0003               2214      MOVE.B #3,D1
+00002ABA  4EB8 227A               2215      JSR WIDTH_PEN
+00002ABE                          2216      
+00002ABE  323C 010B               2217      MOVE.W #267,D1 
+00002AC2  343C 0119               2218      MOVE.W #281,D2 
+00002AC6  363C 00E9               2219      MOVE.W #233,D3
+00002ACA  383C 013A               2220      MOVE.W #314,D4
+00002ACE  4EB8 2252               2221      JSR DRAW_LINE
+00002AD2                          2222      
+00002AD2  323C 00E9               2223      MOVE.W #233,D1 
+00002AD6  343C 0119               2224      MOVE.W #281,D2 
+00002ADA  363C 010B               2225      MOVE.W #267,D3
+00002ADE  383C 013A               2226      MOVE.W #314,D4
+00002AE2  4EB8 2252               2227      JSR DRAW_LINE  
+00002AE6  4E75                    2228      RTS
+00002AE8                          2229      
+00002AE8                          2230  O_case_2_0:
+00002AE8  223C 00FFFFFF           2231      MOVE.L #$00FFFFFF,D1
+00002AEE  4EB8 223A               2232      JSR SET_PEN_COLOR
+00002AF2                          2233      
+00002AF2  223C 00FFFFFF           2234      MOVE.L #$00FFFFFF,D1
+00002AF8  4EB8 2242               2235      JSR SET_FILL_COLOR
+00002AFC                          2236      
+00002AFC  323C 010B               2237      MOVE.W #267,D1 
+00002B00  343C 0119               2238      MOVE.W #281,D2 
+00002B04  363C 00E9               2239      MOVE.W #233,D3
+00002B08  383C 013A               2240      MOVE.W #314,D4
+00002B0C  4EB8 2262               2241      JSR DRAW_FILL_ELLIPSE
+00002B10  4E75                    2242      RTS
+00002B12                          2243      
+00002B12                          2244  X_case_2_1:
+00002B12  223C 00696969           2245      MOVE.L #$00696969,D1
+00002B18  4EB8 223A               2246      JSR SET_PEN_COLOR
+00002B1C                          2247      
+00002B1C  123C 0003               2248      MOVE.B #3,D1
+00002B20  4EB8 227A               2249      JSR WIDTH_PEN
+00002B24                          2250      
+00002B24  323C 0151               2251      MOVE.W #337,D1 
+00002B28  343C 0119               2252      MOVE.W #281,D2 
+00002B2C  363C 012F               2253      MOVE.W #303,D3
+00002B30  383C 013A               2254      MOVE.W #314,D4
+00002B34  4EB8 2252               2255      JSR DRAW_LINE
+00002B38                          2256      
+00002B38  323C 012F               2257      MOVE.W #303,D1 
+00002B3C  343C 0119               2258      MOVE.W #281,D2 
+00002B40  363C 0151               2259      MOVE.W #337,D3
+00002B44  383C 013A               2260      MOVE.W #314,D4
+00002B48  4EB8 2252               2261      JSR DRAW_LINE
+00002B4C  4E75                    2262      RTS
+00002B4E                          2263      
+00002B4E                          2264  O_case_2_1:
+00002B4E  223C 00FFFFFF           2265      MOVE.L #$00FFFFFF,D1
+00002B54  4EB8 223A               2266      JSR SET_PEN_COLOR
+00002B58                          2267      
+00002B58  223C 00FFFFFF           2268      MOVE.L #$00FFFFFF,D1
+00002B5E  4EB8 2242               2269      JSR SET_FILL_COLOR
+00002B62                          2270      
+00002B62  323C 0151               2271      MOVE.W #337,D1 
+00002B66  343C 0119               2272      MOVE.W #281,D2 
+00002B6A  363C 012F               2273      MOVE.W #303,D3
+00002B6E  383C 013A               2274      MOVE.W #314,D4
+00002B72  4EB8 2262               2275      JSR DRAW_FILL_ELLIPSE
+00002B76  4E75                    2276      RTS
+00002B78                          2277      
+00002B78                          2278  X_case_2_2:
+00002B78  223C 00696969           2279      MOVE.L #$00696969,D1
+00002B7E  4EB8 223A               2280      JSR SET_PEN_COLOR
+00002B82                          2281      
+00002B82  123C 0003               2282      MOVE.B #3,D1
+00002B86  4EB8 227A               2283      JSR WIDTH_PEN
+00002B8A                          2284      
+00002B8A  323C 0197               2285      MOVE.W #407,D1 
+00002B8E  343C 0119               2286      MOVE.W #281,D2 
+00002B92  363C 0175               2287      MOVE.W #373,D3
+00002B96  383C 013A               2288      MOVE.W #314,D4
+00002B9A  4EB8 2252               2289      JSR DRAW_LINE
+00002B9E                          2290      
+00002B9E  323C 0175               2291      MOVE.W #373,D1 
+00002BA2  343C 0119               2292      MOVE.W #281,D2 
+00002BA6  363C 0197               2293      MOVE.W #407,D3
+00002BAA  383C 013A               2294      MOVE.W #314,D4
+00002BAE  4EB8 2252               2295      JSR DRAW_LINE
+00002BB2  4E75                    2296      RTS   
+00002BB4                          2297      
+00002BB4                          2298  O_case_2_2:
+00002BB4  223C 00FFFFFF           2299      MOVE.L #$00FFFFFF,D1
+00002BBA  4EB8 223A               2300      JSR SET_PEN_COLOR
+00002BBE                          2301      
+00002BBE  223C 00FFFFFF           2302      MOVE.L #$00FFFFFF,D1
+00002BC4  4EB8 2242               2303      JSR SET_FILL_COLOR
+00002BC8                          2304      
+00002BC8  323C 0197               2305      MOVE.W #407,D1 
+00002BCC  343C 0119               2306      MOVE.W #281,D2 
+00002BD0  363C 0175               2307      MOVE.W #373,D3
+00002BD4  383C 013A               2308      MOVE.W #314,D4
+00002BD8  4EB8 2262               2309      JSR DRAW_FILL_ELLIPSE
+00002BDC  4E75                    2310      RTS
+00002BDE                          2311  
+00002BDE                          2312  
+00002BDE                          2313  
+00002BDE                          2314  
+00002BDE                          2315  
+00002BDE                          2316  
+00002BDE                          2317  
+00002BDE                          2318  
+00002BDE                          2319  -------------------- end include --------------------
+00002BDE                          2320      
+00002BDE                          2321      TABLE: DS.B 25 
+00002BF8= 0000                    2322      X: DC.W 0
+00002BFA= 0000                    2323      Y: DC.W 0
+00002BFC= 00                      2324      PLEIN: DC.B 0
+00002BFD= 00                      2325      CHOIXNJ: DC.B 0
+00002BFE= 0000                    2326      J1_J2: DC.W 0
+00002C00= 00000000                2327      ADRESSE: DC.L 0
+00002C04= 4D 41 54 43 48 20 ...   2328      EGALITE: DC.B 'MATCH NUL',0
+00002C0E= 47 41 47 4E 45 20 ...   2329      GAGNE: DC.B 'GAGNE !',0
+00002C16= 30 00                   2330      SCORE_X: DC.B 48,0
+00002C18= 30 00                   2331      SCORE_O: DC.B 48,0
+00002C1A= 41 70 70 75 79 65 ...   2332      JOUEUR1_: DC.B 'Appuyer sur t pour 1 JOUEUR',0
+00002C36= 41 70 70 75 79 65 ...   2333      JOUEUR2_: DC.B 'Appuyer sur y pour 2 JOUEUR',0
+00002C52= 41 70 70 75 79 65 ...   2334      REPRENDRE_: DC.B 'Appuyer sur r pour reprendre',0
+00002C6F= 41 70 70 75 79 65 ...   2335      MENU_: DC.B 'Appuyer sur esc pour MENU',0
+00002C89= 4D 45 4E 55 00          2336      MENU__: DC.B 'MENU',0
+00002C8E= 30                      2337      S_X: DC.B 48
+00002C8F= 30                      2338      S_O: DC.B 48
+00002C90                          2339      END $1000        
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+ADRESSE             2C00
+AFFCAR              21E4
+AFFCHAINE           220A
+CASE_SUIV_DIA1_1    1B9C
+CASE_SUIV_DIA1_1_J1  13A2
+CASE_SUIV_DIA1_1_J2  177A
+CASE_SUIV_DIA1_1_O  1F76
+CASE_SUIV_DIA1_2    1BB2
+CASE_SUIV_DIA1_2_J1  13B8
+CASE_SUIV_DIA1_2_J2  1790
+CASE_SUIV_DIA1_2_O  1F8C
+CASE_SUIV_DIA2_1    1BF6
+CASE_SUIV_DIA2_1_J1  13FC
+CASE_SUIV_DIA2_1_J2  17D4
+CASE_SUIV_DIA2_1_O  1FD0
+CASE_SUIV_DIA2_2    1C0C
+CASE_SUIV_DIA2_2_J1  1412
+CASE_SUIV_DIA2_2_J2  17EA
+CASE_SUIV_DIA2_2_O  1FE6
+CHOISIR             1026
+CHOIXNJ             2BFD
+CONTINUER           1C22
+CONTINUER_J1        1428
+CONTINUER_J2        1800
+CONTINUER_JEU       1098
+CONTINUER_JEU2      189E
+CONTINUER_O         1FFC
+CONTINUER_VERIF_D   1B6A
+CONTINUER_VERIF_D_J1  1370
+CONTINUER_VERIF_D_J2  1748
+CONTINUER_VERIF_D_O  1F44
+DESSINER_GRILLE     25F2
+DRAW_ELLIPSE        226A
+DRAW_FILL_ELLIPSE   2262
+DRAW_FILL_RECT      2272
+DRAW_LINE           2252
+DRAW_RECT           225A
+DRAW_STRING         2282
+EGALITE             2C04
+EMPTY1              1924
+EMPTY1_J1           112A
+EMPTY1_J2           1502
+EMPTY1_O            1CFE
+EMPTY2              19E0
+EMPTY2_J1           11E6
+EMPTY2_J2           15BE
+EMPTY2_O            1DBA
+EMPTY3              1A8C
+EMPTY3_J1           1292
+EMPTY3_J2           166A
+EMPTY3_O            1E66
+FAIRE_PASSE_LE_TEMP  205A
+FAIRE_PASSE_LE_TEMP11  20DA
+FAIRE_PASSE_LE_TEMP22  215C
+FIN                 221C
+FIN1                2232
+FINJOUEUR           1B12
+FINJOUEUR_J1        1318
+FINJOUEUR_J2        16F0
+FINJOUEUR_O         1EEC
+FINPRG              2204
+FIN_FAIRE_PASSE_LE_TEMP  2068
+FIN_FAIRE_PASSE_LE_TEMP11  20E8
+FIN_FAIRE_PASSE_LE_TEMP22  216A
+FIN_JEU             21DE
+FIN_VERIFIER_O      1C6A
+FIN_VERIFIER_O_J1   1470
+FIN_VERIFIER_O_J2   184A
+FIN_VERIFIER_O_O    2046
+FIN_VIDER           2098
+FIN_VIDER1          212A
+FIN_VIDER2          21AC
+GAGNE               2C0E
+GAGNE_J1            215C
+GAGNE_J1_J2         20CA
+GAGNE_J2            20DA
+GET_TIME            21EC
+INFERIEUR           18E8
+INFERIEUR_J1        10EE
+INFERIEUR_J2        14C6
+INFERIEUR_O         1CC0
+J1_J2               2BFE
+JOUEUR              189E
+JOUEUR1             10A4
+JOUEUR1_            2C1A
+JOUEUR2             147C
+JOUEUR2_            2C36
+JOUEUR_1_2          228A
+LAUTRE_DIAGONALE    1BC8
+LAUTRE_DIAGONALE_J1  13CE
+LAUTRE_DIAGONALE_J2  17A6
+LAUTRE_DIAGONALE_O  1FA2
+MATCH_NUL           231E
+MENU                1000
+MENU_               2C6F
+MENU__              2C89
+METTRE_11           1A12
+METTRE_11_J1        1218
+METTRE_11_J2        15F0
+METTRE_11_O         1DEC
+METTRE_13           19F8
+METTRE_13_J1        11FE
+METTRE_13_J2        15D6
+METTRE_13_O         1DD2
+METTRE_16           1962
+METTRE_16_J1        1168
+METTRE_16_J2        1540
+METTRE_16_O         1D3C
+METTRE_18           1948
+METTRE_18_J1        114E
+METTRE_18_J2        1526
+METTRE_18_O         1D22
+METTRE_6            1ACA
+METTRE_6_J1         12D0
+METTRE_6_J2         16A8
+METTRE_6_O          1EA4
+METTRE_8            1AB0
+METTRE_8_J1         12B6
+METTRE_8_J2         168E
+METTRE_8_O          1E8A
+METTRE_PLEIN        1C44
+METTRE_PLEIN_J1     144A
+METTRE_PLEIN_J2     1824
+METTRE_PLEIN_O      2020
+METTRE_SYMB1        1974
+METTRE_SYMB1_J1     117A
+METTRE_SYMB1_J2     1552
+METTRE_SYMB1_O      1D4E
+METTRE_SYMB2        1A24
+METTRE_SYMB2_J1     122A
+METTRE_SYMB2_J2     1602
+METTRE_SYMB2_O      1DFE
+METTRE_SYMB3        1ADC
+METTRE_SYMB3_J1     12E2
+METTRE_SYMB3_J2     16BA
+METTRE_SYMB3_O      1EB6
+MINIINFERIEUR       18F0
+MINIINFERIEUR_J1    10F6
+MINIINFERIEUR_J2    14CE
+MINIINFERIEUR_O     1CC8
+MINISUPERIEUR       19B2
+MINISUPERIEUR_J1    11B8
+MINISUPERIEUR_J2    1590
+MINISUPERIEUR_O     1D8C
+MSUP                1A56
+MSUP_J1             125C
+MSUP_J2             1634
+MSUP_O              1E30
+NSUP                19AE
+NSUP_J1             11B4
+NSUP_J2             158C
+NSUP_O              1D88
+ORDI                1C6A
+O_CASE_0_0          2884
+O_CASE_0_0_J2       16CE
+O_CASE_0_0_O        1ECA
+O_CASE_0_1          28EA
+O_CASE_0_1_J2       16D8
+O_CASE_0_1_O        1ED4
+O_CASE_0_2          2950
+O_CASE_0_2_J2       16E2
+O_CASE_0_2_O        1EDE
+O_CASE_1_0          29B6
+O_CASE_1_0_J2       1616
+O_CASE_1_0_O        1E12
+O_CASE_1_1          2A1C
+O_CASE_1_1_J2       1620
+O_CASE_1_1_O        1E1C
+O_CASE_1_2          2A82
+O_CASE_1_2_J2       162A
+O_CASE_1_2_O        1E26
+O_CASE_2_0          2AE8
+O_CASE_2_0_J2       156E
+O_CASE_2_0_O        1D6A
+O_CASE_2_1          2B4E
+O_CASE_2_1_J2       1578
+O_CASE_2_1_O        1D74
+O_CASE_2_2          2BB4
+O_CASE_2_2_J2       1582
+O_CASE_2_2_O        1D7E
+O_GAGNE             2438
+PAS_METTRE_PLEIN    1C50
+PAS_METTRE_PLEIN_J1  1456
+PAS_METTRE_PLEIN_J2  1830
+PAS_METTRE_PLEIN_O  202C
+PLEIN               2BFC
+PLEIN_MATCH_NUL     205A
+POS_CURS            21F4
+POT_DE_PEINTURE     224A
+REGARDER1_O         1918
+REGARDER1_O_J1      111E
+REGARDER1_O_J2      14F6
+REGARDER1_O_O       1CF2
+REGARDER2_O         19D4
+REGARDER2_O_J1      11DA
+REGARDER2_O_J2      15B2
+REGARDER2_O_O       1DAE
+REGARDER3_O         1A80
+REGARDER3_O_J1      1286
+REGARDER3_O_J2      165E
+REGARDER3_O_O       1E5A
+REPRENDRE           189E
+REPRENDRE_          2C52
+REPRENDRE_J1        10A4
+REPRENDRE_J2        147C
+REPRENDRE_LE_JEU    1050
+REPRENDRE_LE_JEU2   1856
+REPRENDRE_O         1C6A
+REPRENDRE_OU_QUITTER0  2098
+REPRENDRE_OU_QUITTER1  212A
+REPRENDRE_OU_QUITTER2  21AC
+RESULTAT            204A
+SAISCAR             21FC
+SAISCHAINE          221E
+SCORE_O             2C18
+SCORE_X             2C16
+SET_FILL_COLOR      2242
+SET_PEN_COLOR       223A
+SUP                 1B0E
+SUPERIEUR           1A5A
+SUPERIEUR_A30       18DA
+SUPERIEUR_A30_J1    10E0
+SUPERIEUR_A30_J2    14B8
+SUPERIEUR_A30_O     1CB2
+SUPERIEUR_J1        1260
+SUPERIEUR_J2        1638
+SUPERIEUR_O         1E34
+SUP_J1              1314
+SUP_J2              16EC
+SUP_O               1EE8
+S_O                 2C8F
+S_X                 2C8E
+TABLE               2BDE
+TOUR_O              27D4
+TOUR_X              2760
+VERIFIERCHOIX0      20BA
+VERIFIERCHOIX1      214C
+VERIFIERCHOIX2      21CE
+VERIFIER_COLONNE_EN_BAS  1B34
+VERIFIER_COLONNE_EN_BAS_J1  133A
+VERIFIER_COLONNE_EN_BAS_J2  1712
+VERIFIER_COLONNE_EN_BAS_O  1F0E
+VERIFIER_DIAGONALE_1  1B8A
+VERIFIER_DIAGONALE_1_J1  1390
+VERIFIER_DIAGONALE_1_J2  1768
+VERIFIER_DIAGONALE_1_O  1F64
+VERIFIER_DIAGONALE_2  1BE4
+VERIFIER_DIAGONALE_2_J1  13EA
+VERIFIER_DIAGONALE_2_J2  17C2
+VERIFIER_DIAGONALE_2_O  1FBE
+VERIFIER_LIGNE_D    1B60
+VERIFIER_LIGNE_D_J1  1366
+VERIFIER_LIGNE_G    1B3E
+VERIFIER_LIGNE_G_J1  1344
+VERIFIER_LIGNE_G_J2  171C
+VERIFIER_LIGNE_G_O  1F18
+VERIFIER_LIGNE_J2   173E
+VERIFIER_LIGNE_O    1F3A
+VERIFIER_O          1C5E
+VERIFIER_O_J1       1464
+VERIFIER_O_J2       183E
+VERIFIER_O_O        203A
+VERIFIER_REMPLIE    1C3A
+VERIFIER_REMPLIE_J1  1440
+VERIFIER_REMPLIE_J2  181A
+VERIFIER_REMPLIE_O  2016
+VIDER               2088
+VIDER1              211A
+VIDER2              219C
+WIDTH_PEN           227A
+X                   2BF8
+X_CASE_0_0          2848
+X_CASE_0_0_J        1AF0
+X_CASE_0_0_J1       12F6
+X_CASE_0_1          28AE
+X_CASE_0_1_J        1AFA
+X_CASE_0_1_J1       1300
+X_CASE_0_2          2914
+X_CASE_0_2_J        1B04
+X_CASE_0_2_J1       130A
+X_CASE_1_0          297A
+X_CASE_1_0_J        1A38
+X_CASE_1_0_J1       123E
+X_CASE_1_1          29E0
+X_CASE_1_1_J        1A42
+X_CASE_1_1_J1       1248
+X_CASE_1_2          2A46
+X_CASE_1_2_J        1A4C
+X_CASE_1_2_J1       1252
+X_CASE_2_0          2AAC
+X_CASE_2_0_J        1990
+X_CASE_2_0_J1       1196
+X_CASE_2_1          2B12
+X_CASE_2_1_J        199A
+X_CASE_2_1_J1       11A0
+X_CASE_2_2          2B78
+X_CASE_2_2_J        19A4
+X_CASE_2_2_J1       11AA
+X_GAGNE             2508
+Y                   2BFA
+_1_JOUEUR           184E
+_2_JOUEUR           1048

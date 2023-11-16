@@ -1,0 +1,1000 @@
+00001000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 06/10/2023 09:21:19
+
+00000000                             1  *-----------------------------------------------------------
+00000000                             2  * Title      :
+00000000                             3  * Written by :
+00000000                             4  * Date       :
+00000000                             5  * Description:
+00000000                             6  *-----------------------------------------------------------
+00000000                             7      
+00000000                             8  JOUEUR_1_2:
+00000000  123C 0001                  9      MOVE.B #1,D1
+Line 10 ERROR: Undefined symbol
+00000004  4EB9 004DBD16             10      JSR WIDTH_PEN
+0000000A                            11      
+0000000A  223C 000066CC             12      MOVE.L #$000066CC,D1
+Line 13 ERROR: Undefined symbol
+00000010  4EB9 004DBD16             13      JSR SET_FILL_COLOR
+00000016  323C 02BC                 14      MOVE.W #700,D1 
+0000001A  343C 01F4                 15      MOVE.W #500,D2 
+0000001E  363C 0000                 16      MOVE.W #0,D3
+00000022  383C 0000                 17      MOVE.W #0,D4
+Line 18 ERROR: Undefined symbol
+00000026  4EB9 004DBD16             18      JSR DRAW_FILL_RECT
+0000002C                            19  
+0000002C  223C 00606060             20      MOVE.L #$00606060,D1
+Line 21 ERROR: Undefined symbol
+00000032  4EB9 004DBD16             21      JSR SET_FILL_COLOR
+00000038                            22      
+00000038  323C 01B8                 23      MOVE.W #440,D1 
+0000003C  343C 008C                 24      MOVE.W #140,D2 
+00000040  363C 00C8                 25      MOVE.W #200,D3
+00000044  383C 00AA                 26      MOVE.W #170,D4
+Line 27 ERROR: Undefined symbol
+00000048  4EB9 004DBD16             27      JSR DRAW_FILL_RECT
+0000004E                            28      
+0000004E  323C 01B8                 29      MOVE.W #440,D1 
+00000052  343C 00DC                 30      MOVE.W #220,D2 
+00000056  363C 00C8                 31      MOVE.W #200,D3
+0000005A  383C 00FA                 32      MOVE.W #250,D4
+Line 33 ERROR: Undefined symbol
+0000005E  4EB9 004DBD16             33      JSR DRAW_FILL_RECT
+00000064                            34      
+00000064  323C 00D4                 35      MOVE.W #212,D1
+00000068  343C 0096                 36      MOVE.W #150,D2
+Line 37 ERROR: Undefined symbol
+0000006C  327C BD16                 37      MOVE #JOUEUR1_,A1
+Line 38 ERROR: Undefined symbol
+00000070  4EB9 004DBD16             38      JSR DRAW_STRING
+00000076                            39      
+00000076  323C 00D4                 40      MOVE.W #212,D1
+0000007A  343C 00E6                 41      MOVE.W #230,D2
+Line 42 ERROR: Undefined symbol
+0000007E  327C BD16                 42      MOVE #JOUEUR2_,A1
+Line 43 ERROR: Undefined symbol
+00000082  4EB9 004DBD16             43      JSR DRAW_STRING
+00000088                            44      
+00000088  223C 000066CC             45      MOVE.L #$000066CC,D1
+Line 46 ERROR: Undefined symbol
+0000008E  4EB9 004DBD16             46      JSR SET_FILL_COLOR
+00000094                            47      
+00000094  323C 012C                 48      MOVE.W #300,D1
+00000098  343C 0064                 49      MOVE.W #100,D2
+Line 50 ERROR: Undefined symbol
+0000009C  327C BD16                 50      MOVE #MENU__,A1
+Line 51 ERROR: Undefined symbol
+000000A0  4EB9 004DBD16             51      JSR DRAW_STRING  
+000000A6  4E75                      52      RTS
+000000A8                            53      
+000000A8                            54  MATCH_NUL: 
+000000A8  123C 0001                 55      MOVE.B #1,D1
+Line 56 ERROR: Undefined symbol
+000000AC  4EB9 004DBD16             56      JSR WIDTH_PEN
+000000B2                            57      
+000000B2  223C 00EBCE87             58      MOVE.L #$00EBCE87,D1
+Line 59 ERROR: Undefined symbol
+000000B8  4EB9 004DBD16             59      JSR SET_FILL_COLOR
+000000BE  323C 02BC                 60      MOVE.W #700,D1 
+000000C2  343C 01F4                 61      MOVE.W #500,D2 
+000000C6  363C 0000                 62      MOVE.W #0,D3
+000000CA  383C 0000                 63      MOVE.W #0,D4
+Line 64 ERROR: Undefined symbol
+000000CE  4EB9 004DBD16             64      JSR DRAW_FILL_RECT
+000000D4                            65      
+000000D4  223C 00FFFFFF             66      MOVE.L #$00FFFFFF,D1
+Line 67 ERROR: Undefined symbol
+000000DA  4EB9 004DBD16             67      JSR SET_PEN_COLOR
+000000E0                            68      
+000000E0  223C 00FFFFFF             69      MOVE.L #$00FFFFFF,D1
+Line 70 ERROR: Undefined symbol
+000000E6  4EB9 004DBD16             70      JSR SET_FILL_COLOR
+000000EC                            71      
+000000EC  323C 0131                 72      MOVE.W #305,D1 
+000000F0  343C 00EB                 73      MOVE.W #235,D2 
+000000F4  363C 00E6                 74      MOVE.W #230,D3
+000000F8  383C 00A0                 75      MOVE.W #160,D4
+Line 76 ERROR: Undefined symbol
+000000FC  4EB9 004DBD16             76      JSR DRAW_FILL_ELLIPSE
+00000102                            77      
+00000102  223C 00696969             78      MOVE.L #$00696969,D1
+Line 79 ERROR: Undefined symbol
+00000108  4EB9 004DBD16             79      JSR SET_PEN_COLOR
+0000010E                            80      
+0000010E  123C 0004                 81      MOVE.B #4,D1
+Line 82 ERROR: Undefined symbol
+00000112  4EB9 004DBD16             82      JSR WIDTH_PEN
+00000118  323C 019A                 83      MOVE.W #410,D1 
+0000011C  343C 00EB                 84      MOVE.W #235,D2 
+00000120  363C 014F                 85      MOVE.W #335,D3
+00000124  383C 00A0                 86      MOVE.W #160,D4
+Line 87 ERROR: Undefined symbol
+00000128  4EB9 004DBD16             87      JSR DRAW_LINE
+0000012E                            88  
+0000012E  123C 0004                 89      MOVE.B #4,D1
+Line 90 ERROR: Undefined symbol
+00000132  4EB9 004DBD16             90      JSR WIDTH_PEN
+00000138  323C 014F                 91      MOVE.W #335,D1 
+0000013C  343C 00EB                 92      MOVE.W #235,D2 
+00000140  363C 019A                 93      MOVE.W #410,D3
+00000144  383C 00A0                 94      MOVE.W #160,D4
+Line 95 ERROR: Undefined symbol
+00000148  4EB9 004DBD16             95      JSR DRAW_LINE
+0000014E                            96      
+0000014E  223C 00696969             97      MOVE.L #$00696969,D1
+Line 98 ERROR: Undefined symbol
+00000154  4EB9 004DBD16             98      JSR SET_FILL_COLOR
+0000015A                            99      
+0000015A  323C 011D                100      MOVE.W #285,D1
+0000015E  343C 00FF                101      MOVE.W #255,D2
+Line 102 ERROR: Undefined symbol
+00000162  327C BD16                102      MOVE #EGALITE,A1
+Line 103 ERROR: Undefined symbol
+00000166  4EB9 004DBD16            103      JSR DRAW_STRING
+0000016C                           104      
+0000016C                           105      
+0000016C  223C 00006600            106      MOVE.L #$00006600,D1
+Line 107 ERROR: Undefined symbol
+00000172  4EB9 004DBD16            107      JSR SET_FILL_COLOR
+00000178                           108      
+00000178  123C 0001                109      MOVE.B #1,D1
+Line 110 ERROR: Undefined symbol
+0000017C  4EB9 004DBD16            110      JSR WIDTH_PEN
+00000182                           111      
+00000182  323C 01B8                112      MOVE.W #440,D1 
+00000186  343C 0172                113      MOVE.W #370,D2 
+0000018A  363C 00C8                114      MOVE.W #200,D3
+0000018E  383C 0190                115      MOVE.W #400,D4
+Line 116 ERROR: Undefined symbol
+00000192  4EB9 004DBD16            116      JSR DRAW_FILL_RECT
+00000198                           117      
+00000198  323C 00D1                118      MOVE.W #209,D1
+0000019C  343C 017C                119      MOVE.W #380,D2
+Line 120 ERROR: Undefined symbol
+000001A0  327C BD16                120      MOVE #REPRENDRE_,A1
+Line 121 ERROR: Undefined symbol
+000001A4  4EB9 004DBD16            121      JSR DRAW_STRING
+000001AA                           122      
+000001AA  223C 00000099            123      MOVE.L #$00000099,D1
+Line 124 ERROR: Undefined symbol
+000001B0  4EB9 004DBD16            124      JSR SET_FILL_COLOR
+000001B6                           125      
+000001B6  323C 01B8                126      MOVE.W #440,D1 
+000001BA  343C 01A4                127      MOVE.W #420,D2 
+000001BE  363C 00C8                128      MOVE.W #200,D3
+000001C2  383C 01C2                129      MOVE.W #450,D4
+Line 130 ERROR: Undefined symbol
+000001C6  4EB9 004DBD16            130      JSR DRAW_FILL_RECT
+000001CC                           131    
+000001CC  323C 00DC                132      MOVE.W #220,D1
+000001D0  343C 01AE                133      MOVE.W #430,D2
+Line 134 ERROR: Undefined symbol
+000001D4  327C BD16                134      MOVE #MENU_,A1
+Line 135 ERROR: Undefined symbol
+000001D8  4EB9 004DBD16            135      JSR DRAW_STRING
+000001DE                           136      
+000001DE  223C 00FFFFFF            137      MOVE.L #$00FFFFFF,D1
+Line 138 ERROR: Undefined symbol
+000001E4  4EB9 004DBD16            138      JSR SET_FILL_COLOR
+000001EA  4E75                     139      RTS
+000001EC                           140      
+000001EC                           141  O_GAGNE:
+000001EC  123C 0001                142      MOVE.B #1,D1
+Line 143 ERROR: Undefined symbol
+000001F0  4EB9 004DBD16            143      JSR WIDTH_PEN
+000001F6                           144      
+000001F6  223C 00EBCE87            145      MOVE.L #$00EBCE87,D1
+Line 146 ERROR: Undefined symbol
+000001FC  4EB9 004DBD16            146      JSR SET_FILL_COLOR
+00000202  323C 02BC                147      MOVE.W #700,D1 
+00000206  343C 01F4                148      MOVE.W #500,D2 
+0000020A  363C 0000                149      MOVE.W #0,D3
+0000020E  383C 0000                150      MOVE.W #0,D4
+Line 151 ERROR: Undefined symbol
+00000212  4EB9 004DBD16            151      JSR DRAW_FILL_RECT
+00000218                           152  
+00000218  223C 00FFFFFF            153      MOVE.L #$00FFFFFF,D1
+Line 154 ERROR: Undefined symbol
+0000021E  4EB9 004DBD16            154      JSR SET_PEN_COLOR
+00000224                           155      
+00000224  223C 00FFFFFF            156      MOVE.L #$00FFFFFF,D1
+Line 157 ERROR: Undefined symbol
+0000022A  4EB9 004DBD16            157      JSR SET_FILL_COLOR
+00000230                           158  
+00000230  323C 017C                159      MOVE.W #380,D1 
+00000234  343C 0118                160      MOVE.W #280,D2 
+00000238  363C 0104                161      MOVE.W #260,D3
+0000023C  383C 00A0                162      MOVE.W #160,D4
+Line 163 ERROR: Undefined symbol
+00000240  4EB9 004DBD16            163      JSR DRAW_FILL_ELLIPSE
+00000246                           164      
+00000246  223C 00696969            165      MOVE.L #$00696969,D1
+Line 166 ERROR: Undefined symbol
+0000024C  4EB9 004DBD16            166      JSR SET_FILL_COLOR
+00000252                           167      
+00000252  323C 0122                168      MOVE.W #290,D1
+00000256  343C 0127                169      MOVE.W #295,D2
+Line 170 ERROR: Undefined symbol
+0000025A  327C BD16                170      MOVE #GAGNE,A1
+Line 171 ERROR: Undefined symbol
+0000025E  4EB9 004DBD16            171      JSR DRAW_STRING
+00000264                           172      
+00000264  223C 00006600            173      MOVE.L #$00006600,D1
+Line 174 ERROR: Undefined symbol
+0000026A  4EB9 004DBD16            174      JSR SET_FILL_COLOR
+00000270                           175      
+00000270  323C 01B8                176      MOVE.W #440,D1 
+00000274  343C 0172                177      MOVE.W #370,D2 
+00000278  363C 00C8                178      MOVE.W #200,D3
+0000027C  383C 0190                179      MOVE.W #400,D4
+Line 180 ERROR: Undefined symbol
+00000280  4EB9 004DBD16            180      JSR DRAW_FILL_RECT
+00000286                           181      
+00000286  323C 00D1                182      MOVE.W #209,D1
+0000028A  343C 017C                183      MOVE.W #380,D2
+Line 184 ERROR: Undefined symbol
+0000028E  327C BD16                184      MOVE #REPRENDRE_,A1
+Line 185 ERROR: Undefined symbol
+00000292  4EB9 004DBD16            185      JSR DRAW_STRING
+00000298                           186      
+00000298  223C 00000099            187      MOVE.L #$00000099,D1
+Line 188 ERROR: Undefined symbol
+0000029E  4EB9 004DBD16            188      JSR SET_FILL_COLOR
+000002A4                           189      
+000002A4  323C 01B8                190      MOVE.W #440,D1 
+000002A8  343C 01A4                191      MOVE.W #420,D2 
+000002AC  363C 00C8                192      MOVE.W #200,D3
+000002B0  383C 01C2                193      MOVE.W #450,D4
+Line 194 ERROR: Undefined symbol
+000002B4  4EB9 004DBD16            194      JSR DRAW_FILL_RECT
+000002BA                           195    
+000002BA  323C 00DC                196      MOVE.W #220,D1
+000002BE  343C 01AE                197      MOVE.W #430,D2
+Line 198 ERROR: Undefined symbol
+000002C2  327C BD16                198      MOVE #MENU_,A1
+Line 199 ERROR: Undefined symbol
+000002C6  4EB9 004DBD16            199      JSR DRAW_STRING
+000002CC                           200      
+000002CC  223C 00FFFFFF            201      MOVE.L #$00FFFFFF,D1
+Line 202 ERROR: Undefined symbol
+000002D2  4EB9 004DBD16            202      JSR SET_FILL_COLOR
+000002D8  4E75                     203      RTS
+000002DA                           204      
+000002DA                           205  X_GAGNE:
+000002DA  123C 0001                206      MOVE.B #1,D1
+Line 207 ERROR: Undefined symbol
+000002DE  4EB9 004DBD16            207      JSR WIDTH_PEN
+000002E4                           208      
+000002E4  223C 00EBCE87            209      MOVE.L #$00EBCE87,D1
+Line 210 ERROR: Undefined symbol
+000002EA  4EB9 004DBD16            210      JSR SET_FILL_COLOR
+000002F0  323C 02BC                211      MOVE.W #700,D1 
+000002F4  343C 01F4                212      MOVE.W #500,D2 
+000002F8  363C 0000                213      MOVE.W #0,D3
+000002FC  383C 0000                214      MOVE.W #0,D4
+Line 215 ERROR: Undefined symbol
+00000300  4EB9 004DBD16            215      JSR DRAW_FILL_RECT
+00000306                           216  
+00000306  223C 00696969            217      MOVE.L #$00696969,D1
+Line 218 ERROR: Undefined symbol
+0000030C  4EB9 004DBD16            218      JSR SET_PEN_COLOR
+00000312                           219  
+00000312  123C 000A                220      MOVE.B #10,D1
+Line 221 ERROR: Undefined symbol
+00000316  4EB9 004DBD16            221      JSR WIDTH_PEN
+0000031C                           222      
+0000031C  323C 0168                223      MOVE.W #360,D1 
+00000320  343C 0104                224      MOVE.W #260,D2 
+00000324  363C 0118                225      MOVE.W #280,D3
+00000328  383C 00B4                226      MOVE.W #180,D4
+Line 227 ERROR: Undefined symbol
+0000032C  4EB9 004DBD16            227      JSR DRAW_LINE
+00000332                           228      
+00000332  323C 0118                229      MOVE.W #280,D1 
+00000336  343C 0104                230      MOVE.W #260,D2 
+0000033A  363C 0168                231      MOVE.W #360,D3
+0000033E  383C 00B4                232      MOVE.W #180,D4
+Line 233 ERROR: Undefined symbol
+00000342  4EB9 004DBD16            233      JSR DRAW_LINE
+00000348                           234      
+00000348  223C 00696969            235      MOVE.L #$00696969,D1
+Line 236 ERROR: Undefined symbol
+0000034E  4EB9 004DBD16            236      JSR SET_FILL_COLOR
+00000354                           237      
+00000354  323C 0122                238      MOVE.W #290,D1
+00000358  343C 0127                239      MOVE.W #295,D2
+Line 240 ERROR: Undefined symbol
+0000035C  327C BD16                240      MOVE #GAGNE,A1
+Line 241 ERROR: Undefined symbol
+00000360  4EB9 004DBD16            241      JSR DRAW_STRING
+00000366                           242      
+00000366                           243      
+00000366  223C 00006600            244      MOVE.L #$00006600,D1
+Line 245 ERROR: Undefined symbol
+0000036C  4EB9 004DBD16            245      JSR SET_FILL_COLOR
+00000372                           246      
+00000372  123C 0001                247      MOVE.B #1,D1
+Line 248 ERROR: Undefined symbol
+00000376  4EB9 004DBD16            248      JSR WIDTH_PEN
+0000037C                           249      
+0000037C  323C 01B8                250      MOVE.W #440,D1 
+00000380  343C 0172                251      MOVE.W #370,D2 
+00000384  363C 00C8                252      MOVE.W #200,D3
+00000388  383C 0190                253      MOVE.W #400,D4
+Line 254 ERROR: Undefined symbol
+0000038C  4EB9 004DBD16            254      JSR DRAW_FILL_RECT
+00000392                           255      
+00000392  323C 00D1                256      MOVE.W #209,D1
+00000396  343C 017C                257      MOVE.W #380,D2
+Line 258 ERROR: Undefined symbol
+0000039A  327C BD16                258      MOVE #REPRENDRE_,A1
+Line 259 ERROR: Undefined symbol
+0000039E  4EB9 004DBD16            259      JSR DRAW_STRING
+000003A4                           260      
+000003A4  223C 00000099            261      MOVE.L #$00000099,D1
+Line 262 ERROR: Undefined symbol
+000003AA  4EB9 004DBD16            262      JSR SET_FILL_COLOR
+000003B0                           263      
+000003B0  323C 01B8                264      MOVE.W #440,D1 
+000003B4  343C 01A4                265      MOVE.W #420,D2 
+000003B8  363C 00C8                266      MOVE.W #200,D3
+000003BC  383C 01C2                267      MOVE.W #450,D4
+Line 268 ERROR: Undefined symbol
+000003C0  4EB9 004DBD16            268      JSR DRAW_FILL_RECT
+000003C6                           269    
+000003C6  323C 00DC                270      MOVE.W #220,D1
+000003CA  343C 01AE                271      MOVE.W #430,D2
+Line 272 ERROR: Undefined symbol
+000003CE  327C BD16                272      MOVE #MENU_,A1
+Line 273 ERROR: Undefined symbol
+000003D2  4EB9 004DBD16            273      JSR DRAW_STRING
+000003D8                           274      
+000003D8  223C 00FFFFFF            275      MOVE.L #$00FFFFFF,D1
+Line 276 ERROR: Undefined symbol
+000003DE  4EB9 004DBD16            276      JSR SET_FILL_COLOR
+000003E4  4E75                     277      RTS
+000003E6                           278      
+000003E6                           279  DESSINER_GRILLE:
+000003E6  123C 0001                280      MOVE.B #1,D1
+Line 281 ERROR: Undefined symbol
+000003EA  4EB9 004DBD16            281      JSR WIDTH_PEN
+000003F0                           282      
+000003F0  223C 00EBCE87            283      MOVE.L #$00EBCE87,D1
+Line 284 ERROR: Undefined symbol
+000003F6  4EB9 004DBD16            284      JSR SET_FILL_COLOR
+000003FC  323C 02BC                285      MOVE.W #700,D1 
+00000400  343C 01F4                286      MOVE.W #500,D2 
+00000404  363C 0000                287      MOVE.W #0,D3
+00000408  383C 0000                288      MOVE.W #0,D4
+Line 289 ERROR: Undefined symbol
+0000040C  4EB9 004DBD16            289      JSR DRAW_FILL_RECT
+00000412                           290      
+00000412  223C 00EBCE87            291      MOVE.L #$00EBCE87,D1
+Line 292 ERROR: Undefined symbol
+00000418  4EB9 004DBD16            292      JSR SET_PEN_COLOR
+0000041E  323C 01A9                293      MOVE.W #425,D1 
+00000422  343C 008C                294      MOVE.W #140,D2 
+00000426  363C 00D7                295      MOVE.W #215,D3
+0000042A  383C 014A                296      MOVE.W #330,D4
+Line 297 ERROR: Undefined symbol
+0000042E  4EB9 004DBD16            297      JSR DRAW_RECT
+00000434                           298      
+00000434  223C 00666600            299      MOVE.L #$00666600,D1
+Line 300 ERROR: Undefined symbol
+0000043A  4EB9 004DBD16            300      JSR SET_PEN_COLOR
+00000440                           301      
+00000440  123C 0003                302      MOVE.B #3,D1
+Line 303 ERROR: Undefined symbol
+00000444  4EB9 004DBD16            303      JSR WIDTH_PEN
+0000044A                           304      
+0000044A  323C 011D                305      MOVE.W #285,D1 
+0000044E  343C 008C                306      MOVE.W #140,D2 
+00000452  363C 011D                307      MOVE.W #285,D3
+00000456  383C 014A                308      MOVE.W #330,D4
+Line 309 ERROR: Undefined symbol
+0000045A  4EB9 004DBD16            309      JSR DRAW_LINE
+00000460                           310      
+00000460  323C 0163                311      MOVE.W #355,D1 
+00000464  343C 008C                312      MOVE.W #140,D2 
+00000468  363C 0163                313      MOVE.W #355,D3
+0000046C  383C 014A                314      MOVE.W #330,D4
+Line 315 ERROR: Undefined symbol
+00000470  4EB9 004DBD16            315      JSR DRAW_LINE
+00000476                           316      
+00000476  323C 01A9                317      MOVE.W #425,D1 
+0000047A  343C 00CB                318      MOVE.W #203,D2 
+0000047E  363C 00D7                319      MOVE.W #215,D3
+00000482  383C 00CB                320      MOVE.W #203,D4
+Line 321 ERROR: Undefined symbol
+00000486  4EB9 004DBD16            321      JSR DRAW_LINE
+0000048C                           322      
+0000048C  323C 01A9                323      MOVE.W #425,D1 
+00000490  343C 010A                324      MOVE.W #266,D2 
+00000494  363C 00D7                325      MOVE.W #215,D3
+00000498  383C 010A                326      MOVE.W #266,D4
+Line 327 ERROR: Undefined symbol
+0000049C  4EB9 004DBD16            327      JSR DRAW_LINE
+000004A2                           328      
+000004A2  123C 0001                329      MOVE.B #1,D1
+Line 330 ERROR: Undefined symbol
+000004A6  4EB9 004DBD16            330      JSR WIDTH_PEN
+000004AC                           331      
+000004AC  223C 00E0E0E0            332      MOVE.L #$00E0E0E0,D1
+Line 333 ERROR: Undefined symbol
+000004B2  4EB9 004DBD16            333      JSR SET_FILL_COLOR
+000004B8                           334      
+000004B8  323C 010C                335      MOVE.W #268,D1 
+000004BC  343C 0032                336      MOVE.W #50,D2 
+000004C0  363C 0076                337      MOVE.W #118,D3
+000004C4  383C 005A                338      MOVE.W #90,D4
+Line 339 ERROR: Undefined symbol
+000004C8  4EB9 004DBD16            339      JSR DRAW_FILL_RECT
+000004CE                           340      
+000004CE  323C 020A                341      MOVE.W #522,D1 
+000004D2  343C 0032                342      MOVE.W #50,D2 
+000004D6  363C 0174                343      MOVE.W #372,D3
+000004DA  383C 005A                344      MOVE.W #90,D4
+Line 345 ERROR: Undefined symbol
+000004DE  4EB9 004DBD16            345      JSR DRAW_FILL_RECT
+000004E4                           346      
+000004E4  223C 00696969            347      MOVE.L #$00696969,D1
+Line 348 ERROR: Undefined symbol
+000004EA  4EB9 004DBD16            348      JSR SET_PEN_COLOR
+000004F0                           349      
+000004F0  123C 0003                350      MOVE.B #3,D1
+Line 351 ERROR: Undefined symbol
+000004F4  4EB9 004DBD16            351      JSR WIDTH_PEN
+000004FA                           352      
+000004FA  323C 0094                353      MOVE.W #148,D1 
+000004FE  343C 003C                354      MOVE.W #60,D2 
+00000502  363C 0080                355      MOVE.W #128,D3
+00000506  383C 0050                356      MOVE.W #80,D4
+Line 357 ERROR: Undefined symbol
+0000050A  4EB9 004DBD16            357      JSR DRAW_LINE
+00000510                           358      
+00000510  323C 0080                359      MOVE.W #128,D1 
+00000514  343C 003C                360      MOVE.W #60,D2 
+00000518  363C 0094                361      MOVE.W #148,D3
+0000051C  383C 0050                362      MOVE.W #80,D4
+Line 363 ERROR: Undefined symbol
+00000520  4EB9 004DBD16            363      JSR DRAW_LINE
+00000526                           364      
+00000526  223C 00FFFFFF            365      MOVE.L #$00FFFFFF,D1
+Line 366 ERROR: Undefined symbol
+0000052C  4EB9 004DBD16            366      JSR SET_PEN_COLOR
+00000532                           367      
+00000532  223C 00FFFFFF            368      MOVE.L #$00FFFFFF,D1
+Line 369 ERROR: Undefined symbol
+00000538  4EB9 004DBD16            369      JSR SET_FILL_COLOR
+0000053E                           370      
+0000053E  323C 0197                371      MOVE.W #407,D1 
+00000542  343C 003A                372      MOVE.W #58,D2 
+00000546  363C 017E                373      MOVE.W #382,D3
+0000054A  383C 0052                374      MOVE.W #82,D4
+Line 375 ERROR: Undefined symbol
+0000054E  4EB9 004DBD16            375      JSR DRAW_FILL_ELLIPSE
+00000554                           376      
+00000554  223C 00E0E0E0            377      MOVE.L #$00E0E0E0,D1
+Line 378 ERROR: Undefined symbol
+0000055A  4EB9 004DBD16            378      JSR SET_FILL_COLOR
+00000560                           379      
+00000560  323C 00E9                380      MOVE.W #233,D1
+00000564  343C 003C                381      MOVE.W #60,D2
+Line 382 ERROR: Undefined symbol
+00000568  327C BD16                382      MOVE #SCORE_X,A1
+Line 383 ERROR: Undefined symbol
+0000056C  4EB9 004DBD16            383      JSR DRAW_STRING
+00000572                           384      
+00000572  323C 01EC                385      MOVE.W #492,D1
+00000576  343C 003C                386      MOVE.W #60,D2
+Line 387 ERROR: Undefined symbol
+0000057A  327C BD16                387      MOVE #SCORE_O,A1
+Line 388 ERROR: Undefined symbol
+0000057E  4EB9 004DBD16            388      JSR DRAW_STRING
+00000584  4E75                     389      RTS
+00000586                           390  
+00000586                           391  TOUR_X:
+00000586  223C 0000FF00            392      MOVE.L #$0000FF00,D1
+Line 393 ERROR: Undefined symbol
+0000058C  4EB9 004DBD16            393      JSR SET_PEN_COLOR
+00000592                           394      
+00000592  123C 0004                395      MOVE.B #4,D1
+Line 396 ERROR: Undefined symbol
+00000596  4EB9 004DBD16            396      JSR WIDTH_PEN
+0000059C                           397      
+0000059C  323C 010D                398      MOVE.W #269,D1 
+000005A0  343C 005C                399      MOVE.W #92,D2 
+000005A4  363C 0076                400      MOVE.W #118,D3
+000005A8  383C 005C                401      MOVE.W #92,D4
+Line 402 ERROR: Undefined symbol
+000005AC  4EB9 004DBD16            402      JSR DRAW_FILL_RECT
+000005B2                           403      
+000005B2  223C 00EBCE87            404      MOVE.L #$00EBCE87,D1
+Line 405 ERROR: Undefined symbol
+000005B8  4EB9 004DBD16            405      JSR SET_PEN_COLOR
+000005BE                           406      
+000005BE  123C 0004                407      MOVE.B #4,D1
+Line 408 ERROR: Undefined symbol
+000005C2  4EB9 004DBD16            408      JSR WIDTH_PEN
+000005C8                           409      
+000005C8  323C 020B                410      MOVE.W #523,D1 
+000005CC  343C 005C                411      MOVE.W #92,D2 
+000005D0  363C 0174                412      MOVE.W #372,D3
+000005D4  383C 005C                413      MOVE.W #92,D4
+Line 414 ERROR: Undefined symbol
+000005D8  4EB9 004DBD16            414      JSR DRAW_FILL_RECT
+000005DE                           415      
+000005DE  223C 00666600            416      MOVE.L #$00666600,D1
+Line 417 ERROR: Undefined symbol
+000005E4  4EB9 004DBD16            417      JSR SET_PEN_COLOR
+000005EA                           418      
+000005EA  123C 0001                419      MOVE.B #1,D1
+Line 420 ERROR: Undefined symbol
+000005EE  4EB9 004DBD16            420      JSR WIDTH_PEN
+000005F4                           421      
+000005F4  323C 020A                422      MOVE.W #522,D1 
+000005F8  343C 005A                423      MOVE.W #90,D2 
+000005FC  363C 0174                424      MOVE.W #372,D3
+00000600  383C 005A                425      MOVE.W #90,D4
+Line 426 ERROR: Undefined symbol
+00000604  4EB9 004DBD16            426      JSR DRAW_FILL_RECT
+0000060A  4E75                     427      RTS
+0000060C                           428      
+0000060C                           429  TOUR_O:
+0000060C  223C 0000FF00            430      MOVE.L #$0000FF00,D1
+Line 431 ERROR: Undefined symbol
+00000612  4EB9 004DBD16            431      JSR SET_PEN_COLOR
+00000618                           432      
+00000618  123C 0004                433      MOVE.B #4,D1
+Line 434 ERROR: Undefined symbol
+0000061C  4EB9 004DBD16            434      JSR WIDTH_PEN
+00000622                           435      
+00000622  323C 020B                436      MOVE.W #523,D1 
+00000626  343C 005C                437      MOVE.W #92,D2 
+0000062A  363C 0174                438      MOVE.W #372,D3
+0000062E  383C 005C                439      MOVE.W #92,D4
+Line 440 ERROR: Undefined symbol
+00000632  4EB9 004DBD16            440      JSR DRAW_FILL_RECT
+00000638                           441      
+00000638  223C 00EBCE87            442      MOVE.L #$00EBCE87,D1
+Line 443 ERROR: Undefined symbol
+0000063E  4EB9 004DBD16            443      JSR SET_PEN_COLOR
+00000644                           444      
+00000644  123C 0004                445      MOVE.B #4,D1
+Line 446 ERROR: Undefined symbol
+00000648  4EB9 004DBD16            446      JSR WIDTH_PEN
+0000064E                           447      
+0000064E  323C 010D                448      MOVE.W #269,D1 
+00000652  343C 005C                449      MOVE.W #92,D2 
+00000656  363C 0076                450      MOVE.W #118,D3
+0000065A  383C 005C                451      MOVE.W #92,D4
+Line 452 ERROR: Undefined symbol
+0000065E  4EB9 004DBD16            452      JSR DRAW_FILL_RECT
+00000664                           453  
+00000664                           454      
+00000664  223C 00666600            455      MOVE.L #$00666600,D1
+Line 456 ERROR: Undefined symbol
+0000066A  4EB9 004DBD16            456      JSR SET_PEN_COLOR
+00000670                           457      
+00000670  123C 0001                458      MOVE.B #1,D1
+Line 459 ERROR: Undefined symbol
+00000674  4EB9 004DBD16            459      JSR WIDTH_PEN
+0000067A                           460      
+0000067A  323C 010C                461      MOVE.W #268,D1 
+0000067E  343C 005A                462      MOVE.W #90,D2 
+00000682  363C 0076                463      MOVE.W #118,D3
+00000686  383C 005A                464      MOVE.W #90,D4
+Line 465 ERROR: Undefined symbol
+0000068A  4EB9 004DBD16            465      JSR DRAW_FILL_RECT
+00000690  4E75                     466      RTS
+00000692                           467      
+00000692                           468  X_case_0_0:
+00000692  223C 00696969            469      MOVE.L #$00696969,D1
+Line 470 ERROR: Undefined symbol
+00000698  4EB9 004DBD16            470      JSR SET_PEN_COLOR
+0000069E                           471      
+0000069E  123C 0003                472      MOVE.B #3,D1
+Line 473 ERROR: Undefined symbol
+000006A2  4EB9 004DBD16            473      JSR WIDTH_PEN
+000006A8                           474      
+000006A8  323C 010B                475      MOVE.W #267,D1 
+000006AC  343C 00BC                476      MOVE.W #188,D2 
+000006B0  363C 00E9                477      MOVE.W #233,D3
+000006B4  383C 009B                478      MOVE.W #155,D4
+Line 479 ERROR: Undefined symbol
+000006B8  4EB9 004DBD16            479      JSR DRAW_LINE
+000006BE                           480  
+000006BE  323C 00E9                481      MOVE.W #233,D1 
+000006C2  343C 00BC                482      MOVE.W #188,D2 
+000006C6  363C 010B                483      MOVE.W #267,D3
+000006CA  383C 009B                484      MOVE.W #155,D4
+Line 485 ERROR: Undefined symbol
+000006CE  4EB9 004DBD16            485      JSR DRAW_LINE
+000006D4  4E75                     486      RTS
+000006D6                           487      
+000006D6                           488  O_case_0_0:
+000006D6  223C 00FFFFFF            489      MOVE.L #$00FFFFFF,D1
+Line 490 ERROR: Undefined symbol
+000006DC  4EB9 004DBD16            490      JSR SET_PEN_COLOR
+000006E2                           491      
+000006E2  223C 00FFFFFF            492      MOVE.L #$00FFFFFF,D1
+Line 493 ERROR: Undefined symbol
+000006E8  4EB9 004DBD16            493      JSR SET_FILL_COLOR
+000006EE                           494  
+000006EE  323C 010B                495      MOVE.W #267,D1 
+000006F2  343C 00BC                496      MOVE.W #188,D2 
+000006F6  363C 00E9                497      MOVE.W #233,D3
+000006FA  383C 009B                498      MOVE.W #155,D4
+Line 499 ERROR: Undefined symbol
+000006FE  4EB9 004DBD16            499      JSR DRAW_FILL_ELLIPSE
+00000704  4E75                     500      RTS
+00000706                           501      
+00000706                           502  X_case_0_1:
+00000706  223C 00696969            503      MOVE.L #$00696969,D1
+Line 504 ERROR: Undefined symbol
+0000070C  4EB9 004DBD16            504      JSR SET_PEN_COLOR
+00000712                           505      
+00000712  123C 0003                506      MOVE.B #3,D1
+Line 507 ERROR: Undefined symbol
+00000716  4EB9 004DBD16            507      JSR WIDTH_PEN
+0000071C                           508      
+0000071C  323C 0151                509      MOVE.W #337,D1 
+00000720  343C 00BC                510      MOVE.W #188,D2 
+00000724  363C 012F                511      MOVE.W #303,D3
+00000728  383C 009B                512      MOVE.W #155,D4
+Line 513 ERROR: Undefined symbol
+0000072C  4EB9 004DBD16            513      JSR DRAW_LINE
+00000732                           514     
+00000732  323C 012F                515      MOVE.W #303,D1 
+00000736  343C 00BC                516      MOVE.W #188,D2 
+0000073A  363C 0151                517      MOVE.W #337,D3
+0000073E  383C 009B                518      MOVE.W #155,D4
+Line 519 ERROR: Undefined symbol
+00000742  4EB9 004DBD16            519      JSR DRAW_LINE
+00000748  4E75                     520      RTS
+0000074A                           521      
+0000074A                           522  O_case_0_1:
+0000074A  223C 00FFFFFF            523      MOVE.L #$00FFFFFF,D1
+Line 524 ERROR: Undefined symbol
+00000750  4EB9 004DBD16            524      JSR SET_PEN_COLOR
+00000756                           525      
+00000756  223C 00FFFFFF            526      MOVE.L #$00FFFFFF,D1
+Line 527 ERROR: Undefined symbol
+0000075C  4EB9 004DBD16            527      JSR SET_FILL_COLOR
+00000762                           528      
+00000762  323C 0151                529      MOVE.W #337,D1 
+00000766  343C 00BC                530      MOVE.W #188,D2 
+0000076A  363C 012F                531      MOVE.W #303,D3
+0000076E  383C 009B                532      MOVE.W #155,D4
+Line 533 ERROR: Undefined symbol
+00000772  4EB9 004DBD16            533      JSR DRAW_FILL_ELLIPSE
+00000778  4E75                     534      RTS
+0000077A                           535      
+0000077A                           536  X_case_0_2:
+0000077A  223C 00696969            537      MOVE.L #$00696969,D1
+Line 538 ERROR: Undefined symbol
+00000780  4EB9 004DBD16            538      JSR SET_PEN_COLOR
+00000786                           539      
+00000786  123C 0003                540      MOVE.B #3,D1
+Line 541 ERROR: Undefined symbol
+0000078A  4EB9 004DBD16            541      JSR WIDTH_PEN
+00000790                           542      
+00000790  323C 0197                543      MOVE.W #407,D1 
+00000794  343C 00BC                544      MOVE.W #188,D2 
+00000798  363C 0175                545      MOVE.W #373,D3
+0000079C  383C 009B                546      MOVE.W #155,D4
+Line 547 ERROR: Undefined symbol
+000007A0  4EB9 004DBD16            547      JSR DRAW_LINE
+000007A6                           548      
+000007A6  323C 0175                549      MOVE.W #373,D1 
+000007AA  343C 00BC                550      MOVE.W #188,D2 
+000007AE  363C 0197                551      MOVE.W #407,D3
+000007B2  383C 009B                552      MOVE.W #155,D4
+Line 553 ERROR: Undefined symbol
+000007B6  4EB9 004DBD16            553      JSR DRAW_LINE
+000007BC  4E75                     554      RTS
+000007BE                           555      
+000007BE                           556  O_case_0_2:
+000007BE  223C 00FFFFFF            557      MOVE.L #$00FFFFFF,D1
+Line 558 ERROR: Undefined symbol
+000007C4  4EB9 004DBD16            558      JSR SET_PEN_COLOR
+000007CA                           559      
+000007CA  223C 00FFFFFF            560      MOVE.L #$00FFFFFF,D1
+Line 561 ERROR: Undefined symbol
+000007D0  4EB9 004DBD16            561      JSR SET_FILL_COLOR
+000007D6                           562   
+000007D6  323C 0197                563      MOVE.W #407,D1 
+000007DA  343C 00BC                564      MOVE.W #188,D2 
+000007DE  363C 0175                565      MOVE.W #373,D3
+000007E2  383C 009B                566      MOVE.W #155,D4
+Line 567 ERROR: Undefined symbol
+000007E6  4EB9 004DBD16            567      JSR DRAW_FILL_ELLIPSE
+000007EC  4E75                     568      RTS
+000007EE                           569      
+000007EE                           570  X_case_1_0:
+000007EE  223C 00696969            571      MOVE.L #$00696969,D1
+Line 572 ERROR: Undefined symbol
+000007F4  4EB9 004DBD16            572      JSR SET_PEN_COLOR
+000007FA                           573      
+000007FA  123C 0003                574      MOVE.B #3,D1
+Line 575 ERROR: Undefined symbol
+000007FE  4EB9 004DBD16            575      JSR WIDTH_PEN
+00000804                           576      
+00000804  323C 010B                577      MOVE.W #267,D1 
+00000808  343C 00DA                578      MOVE.W #218,D2 
+0000080C  363C 00E9                579      MOVE.W #233,D3
+00000810  383C 00FB                580      MOVE.W #251,D4
+Line 581 ERROR: Undefined symbol
+00000814  4EB9 004DBD16            581      JSR DRAW_LINE
+0000081A                           582  
+0000081A  323C 00E9                583      MOVE.W #233,D1 
+0000081E  343C 00DA                584      MOVE.W #218,D2 
+00000822  363C 010B                585      MOVE.W #267,D3
+00000826  383C 00FB                586      MOVE.W #251,D4
+Line 587 ERROR: Undefined symbol
+0000082A  4EB9 004DBD16            587      JSR DRAW_LINE   
+00000830  4E75                     588      RTS
+00000832                           589      
+00000832                           590  O_case_1_0:
+00000832  223C 00FFFFFF            591      MOVE.L #$00FFFFFF,D1
+Line 592 ERROR: Undefined symbol
+00000838  4EB9 004DBD16            592      JSR SET_PEN_COLOR
+0000083E                           593      
+0000083E  223C 00FFFFFF            594      MOVE.L #$00FFFFFF,D1
+Line 595 ERROR: Undefined symbol
+00000844  4EB9 004DBD16            595      JSR SET_FILL_COLOR
+0000084A                           596   
+0000084A  323C 010B                597      MOVE.W #267,D1 
+0000084E  343C 00DA                598      MOVE.W #218,D2 
+00000852  363C 00E9                599      MOVE.W #233,D3
+00000856  383C 00FB                600      MOVE.W #251,D4
+Line 601 ERROR: Undefined symbol
+0000085A  4EB9 004DBD16            601      JSR DRAW_FILL_ELLIPSE
+00000860  4E75                     602      RTS
+00000862                           603      
+00000862                           604  X_case_1_1:
+00000862  223C 00696969            605      MOVE.L #$00696969,D1
+Line 606 ERROR: Undefined symbol
+00000868  4EB9 004DBD16            606      JSR SET_PEN_COLOR
+0000086E                           607      
+0000086E  123C 0003                608      MOVE.B #3,D1
+Line 609 ERROR: Undefined symbol
+00000872  4EB9 004DBD16            609      JSR WIDTH_PEN
+00000878                           610      
+00000878  323C 0151                611      MOVE.W #337,D1 
+0000087C  343C 00DA                612      MOVE.W #218,D2 
+00000880  363C 012F                613      MOVE.W #303,D3
+00000884  383C 00FB                614      MOVE.W #251,D4
+Line 615 ERROR: Undefined symbol
+00000888  4EB9 004DBD16            615      JSR DRAW_LINE
+0000088E                           616      
+0000088E  323C 012F                617      MOVE.W #303,D1 
+00000892  343C 00DA                618      MOVE.W #218,D2 
+00000896  363C 0151                619      MOVE.W #337,D3
+0000089A  383C 00FB                620      MOVE.W #251,D4
+Line 621 ERROR: Undefined symbol
+0000089E  4EB9 004DBD16            621      JSR DRAW_LINE
+000008A4  4E75                     622      RTS  
+000008A6                           623      
+000008A6                           624  O_case_1_1:
+000008A6  223C 00FFFFFF            625      MOVE.L #$00FFFFFF,D1
+Line 626 ERROR: Undefined symbol
+000008AC  4EB9 004DBD16            626      JSR SET_PEN_COLOR
+000008B2                           627      
+000008B2  223C 00FFFFFF            628      MOVE.L #$00FFFFFF,D1
+Line 629 ERROR: Undefined symbol
+000008B8  4EB9 004DBD16            629      JSR SET_FILL_COLOR
+000008BE                           630      
+000008BE  323C 0151                631      MOVE.W #337,D1 
+000008C2  343C 00DA                632      MOVE.W #218,D2 
+000008C6  363C 012F                633      MOVE.W #303,D3
+000008CA  383C 00FB                634      MOVE.W #251,D4
+Line 635 ERROR: Undefined symbol
+000008CE  4EB9 004DBD16            635      JSR DRAW_FILL_ELLIPSE
+000008D4  4E75                     636      RTS
+000008D6                           637      
+000008D6                           638  X_case_1_2:
+000008D6  223C 00696969            639      MOVE.L #$00696969,D1
+Line 640 ERROR: Undefined symbol
+000008DC  4EB9 004DBD16            640      JSR SET_PEN_COLOR
+000008E2                           641      
+000008E2  123C 0003                642      MOVE.B #3,D1
+Line 643 ERROR: Undefined symbol
+000008E6  4EB9 004DBD16            643      JSR WIDTH_PEN
+000008EC                           644      
+000008EC  323C 0197                645      MOVE.W #407,D1 
+000008F0  343C 00DA                646      MOVE.W #218,D2 
+000008F4  363C 0175                647      MOVE.W #373,D3
+000008F8  383C 00FB                648      MOVE.W #251,D4
+Line 649 ERROR: Undefined symbol
+000008FC  4EB9 004DBD16            649      JSR DRAW_LINE
+00000902                           650      
+00000902  323C 0175                651      MOVE.W #373,D1 
+00000906  343C 00DA                652      MOVE.W #218,D2 
+0000090A  363C 0197                653      MOVE.W #407,D3
+0000090E  383C 00FB                654      MOVE.W #251,D4
+Line 655 ERROR: Undefined symbol
+00000912  4EB9 004DBD16            655      JSR DRAW_LINE
+00000918  4E75                     656      RTS
+0000091A                           657      
+0000091A                           658  O_case_1_2:
+0000091A  223C 00FFFFFF            659      MOVE.L #$00FFFFFF,D1
+Line 660 ERROR: Undefined symbol
+00000920  4EB9 004DBD16            660      JSR SET_PEN_COLOR
+00000926                           661      
+00000926  223C 00FFFFFF            662      MOVE.L #$00FFFFFF,D1
+Line 663 ERROR: Undefined symbol
+0000092C  4EB9 004DBD16            663      JSR SET_FILL_COLOR
+00000932                           664      
+00000932  323C 0197                665      MOVE.W #407,D1 
+00000936  343C 00DA                666      MOVE.W #218,D2 
+0000093A  363C 0175                667      MOVE.W #373,D3
+0000093E  383C 00FB                668      MOVE.W #251,D4
+Line 669 ERROR: Undefined symbol
+00000942  4EB9 004DBD16            669      JSR DRAW_FILL_ELLIPSE
+00000948  4E75                     670      RTS
+0000094A                           671  X_case_2_0:
+0000094A  223C 00696969            672      MOVE.L #$00696969,D1
+Line 673 ERROR: Undefined symbol
+00000950  4EB9 004DBD16            673      JSR SET_PEN_COLOR
+00000956                           674      
+00000956  123C 0003                675      MOVE.B #3,D1
+Line 676 ERROR: Undefined symbol
+0000095A  4EB9 004DBD16            676      JSR WIDTH_PEN
+00000960                           677      
+00000960  323C 010B                678      MOVE.W #267,D1 
+00000964  343C 0119                679      MOVE.W #281,D2 
+00000968  363C 00E9                680      MOVE.W #233,D3
+0000096C  383C 013A                681      MOVE.W #314,D4
+Line 682 ERROR: Undefined symbol
+00000970  4EB9 004DBD16            682      JSR DRAW_LINE
+00000976                           683      
+00000976  323C 00E9                684      MOVE.W #233,D1 
+0000097A  343C 0119                685      MOVE.W #281,D2 
+0000097E  363C 010B                686      MOVE.W #267,D3
+00000982  383C 013A                687      MOVE.W #314,D4
+Line 688 ERROR: Undefined symbol
+00000986  4EB9 004DBD16            688      JSR DRAW_LINE  
+0000098C  4E75                     689      RTS
+0000098E                           690      
+0000098E                           691  O_case_2_0:
+0000098E  223C 00FFFFFF            692      MOVE.L #$00FFFFFF,D1
+Line 693 ERROR: Undefined symbol
+00000994  4EB9 004DBD16            693      JSR SET_PEN_COLOR
+0000099A                           694      
+0000099A  223C 00FFFFFF            695      MOVE.L #$00FFFFFF,D1
+Line 696 ERROR: Undefined symbol
+000009A0  4EB9 004DBD16            696      JSR SET_FILL_COLOR
+000009A6                           697      
+000009A6  323C 010B                698      MOVE.W #267,D1 
+000009AA  343C 0119                699      MOVE.W #281,D2 
+000009AE  363C 00E9                700      MOVE.W #233,D3
+000009B2  383C 013A                701      MOVE.W #314,D4
+Line 702 ERROR: Undefined symbol
+000009B6  4EB9 004DBD16            702      JSR DRAW_FILL_ELLIPSE
+000009BC  4E75                     703      RTS
+000009BE                           704      
+000009BE                           705  X_case_2_1:
+000009BE  223C 00696969            706      MOVE.L #$00696969,D1
+Line 707 ERROR: Undefined symbol
+000009C4  4EB9 004DBD16            707      JSR SET_PEN_COLOR
+000009CA                           708      
+000009CA  123C 0003                709      MOVE.B #3,D1
+Line 710 ERROR: Undefined symbol
+000009CE  4EB9 004DBD16            710      JSR WIDTH_PEN
+000009D4                           711      
+000009D4  323C 0151                712      MOVE.W #337,D1 
+000009D8  343C 0119                713      MOVE.W #281,D2 
+000009DC  363C 012F                714      MOVE.W #303,D3
+000009E0  383C 013A                715      MOVE.W #314,D4
+Line 716 ERROR: Undefined symbol
+000009E4  4EB9 004DBD16            716      JSR DRAW_LINE
+000009EA                           717      
+000009EA  323C 012F                718      MOVE.W #303,D1 
+000009EE  343C 0119                719      MOVE.W #281,D2 
+000009F2  363C 0151                720      MOVE.W #337,D3
+000009F6  383C 013A                721      MOVE.W #314,D4
+Line 722 ERROR: Undefined symbol
+000009FA  4EB9 004DBD16            722      JSR DRAW_LINE
+00000A00  4E75                     723      RTS
+00000A02                           724      
+00000A02                           725  O_case_2_1:
+00000A02  223C 00FFFFFF            726      MOVE.L #$00FFFFFF,D1
+Line 727 ERROR: Undefined symbol
+00000A08  4EB9 004DBD16            727      JSR SET_PEN_COLOR
+00000A0E                           728      
+00000A0E  223C 00FFFFFF            729      MOVE.L #$00FFFFFF,D1
+Line 730 ERROR: Undefined symbol
+00000A14  4EB9 004DBD16            730      JSR SET_FILL_COLOR
+00000A1A                           731      
+00000A1A  323C 0151                732      MOVE.W #337,D1 
+00000A1E  343C 0119                733      MOVE.W #281,D2 
+00000A22  363C 012F                734      MOVE.W #303,D3
+00000A26  383C 013A                735      MOVE.W #314,D4
+Line 736 ERROR: Undefined symbol
+00000A2A  4EB9 004DBD16            736      JSR DRAW_FILL_ELLIPSE
+00000A30  4E75                     737      RTS
+00000A32                           738      
+00000A32                           739  X_case_2_2:
+00000A32  223C 00696969            740      MOVE.L #$00696969,D1
+Line 741 ERROR: Undefined symbol
+00000A38  4EB9 004DBD16            741      JSR SET_PEN_COLOR
+00000A3E                           742      
+00000A3E  123C 0003                743      MOVE.B #3,D1
+Line 744 ERROR: Undefined symbol
+00000A42  4EB9 004DBD16            744      JSR WIDTH_PEN
+00000A48                           745      
+00000A48  323C 0197                746      MOVE.W #407,D1 
+00000A4C  343C 0119                747      MOVE.W #281,D2 
+00000A50  363C 0175                748      MOVE.W #373,D3
+00000A54  383C 013A                749      MOVE.W #314,D4
+Line 750 ERROR: Undefined symbol
+00000A58  4EB9 004DBD16            750      JSR DRAW_LINE
+00000A5E                           751      
+00000A5E  323C 0175                752      MOVE.W #373,D1 
+00000A62  343C 0119                753      MOVE.W #281,D2 
+00000A66  363C 0197                754      MOVE.W #407,D3
+00000A6A  383C 013A                755      MOVE.W #314,D4
+Line 756 ERROR: Undefined symbol
+00000A6E  4EB9 004DBD16            756      JSR DRAW_LINE
+00000A74  4E75                     757      RTS   
+00000A76                           758      
+00000A76                           759  O_case_2_2:
+00000A76  223C 00FFFFFF            760      MOVE.L #$00FFFFFF,D1
+Line 761 ERROR: Undefined symbol
+00000A7C  4EB9 004DBD16            761      JSR SET_PEN_COLOR
+00000A82                           762      
+00000A82  223C 00FFFFFF            763      MOVE.L #$00FFFFFF,D1
+Line 764 ERROR: Undefined symbol
+00000A88  4EB9 004DBD16            764      JSR SET_FILL_COLOR
+00000A8E                           765      
+00000A8E  323C 0197                766      MOVE.W #407,D1 
+00000A92  343C 0119                767      MOVE.W #281,D2 
+00000A96  363C 0175                768      MOVE.W #373,D3
+00000A9A  383C 013A                769      MOVE.W #314,D4
+Line 770 ERROR: Undefined symbol
+00000A9E  4EB9 004DBD16            770      JSR DRAW_FILL_ELLIPSE
+00000AA4  4E75                     771      RTS
+00000AA6                           772  
+00000AA6                           773  
+00000AA6                           774  
+00000AA6                           775  
+00000AA6                           776  
+00000AA6                           777  
+00000AA6                           778  
+00000AA6                           779  
+Line 780 WARNING: END directive missing, starting address not set
+
+183 errors detected
+1 warning generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+DESSINER_GRILLE     3E6
+JOUEUR_1_2          0
+MATCH_NUL           A8
+O_CASE_0_0          6D6
+O_CASE_0_1          74A
+O_CASE_0_2          7BE
+O_CASE_1_0          832
+O_CASE_1_1          8A6
+O_CASE_1_2          91A
+O_CASE_2_0          98E
+O_CASE_2_1          A02
+O_CASE_2_2          A76
+O_GAGNE             1EC
+TOUR_O              60C
+TOUR_X              586
+X_CASE_0_0          692
+X_CASE_0_1          706
+X_CASE_0_2          77A
+X_CASE_1_0          7EE
+X_CASE_1_1          862
+X_CASE_1_2          8D6
+X_CASE_2_0          94A
+X_CASE_2_1          9BE
+X_CASE_2_2          A32
+X_GAGNE             2DA
